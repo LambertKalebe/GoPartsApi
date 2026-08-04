@@ -1,7 +1,245 @@
+definitions:
+  login.RequestLogin:
+    properties:
+      password:
+        example: "123"
+        type: string
+      username:
+        example: User
+        type: string
+    type: object
+  login.ResponseLogin:
+    properties:
+      message:
+        example: Login realizado com sucesso
+        type: string
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  me.ErrorResponse:
+    properties:
+      message:
+        example: invalid or expired jwt
+        type: string
+    type: object
+  me.ResponseMe:
+    properties:
+      user:
+        $ref: '#/definitions/me.UserResponse'
+      valid:
+        example: true
+        type: boolean
+    type: object
+  me.UserResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+      role:
+        example: admin
+        type: string
+      username:
+        example: admin
+        type: string
+    type: object
+  productIdInfo.Response:
+    properties:
+      hi:
+        example: Hello, World!
+        type: string
+      id:
+        example: "1"
+        type: string
+    type: object
+  products.Product:
+    properties:
+      appCount:
+        example: 1
+        type: integer
+      code:
+        example: FAP-2829
+        type: string
+      codeNorm:
+        example: FAP2829
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg
+        type: string
+      make:
+        example: WEGA
+        type: string
+      name:
+        example: FILTRO DE AR
+        type: string
+      public:
+        example: 1
+        type: integer
+    type: object
+  products.ResponseProducts:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/products.Product'
+        type: array
+    type: object
+  register.ResponseRegister:
+    properties:
+      message:
+        example: User created
+        type: string
+    type: object
+  register.User:
+    properties:
+      password:
+        example: "123"
+        type: string
+      username:
+        example: User
+        type: string
+    type: object
 info:
   contact: {}
 paths:
-  /api/health:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Realiza autenticação do usuário
+      parameters:
+      - description: Credenciais
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/login.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/login.ResponseLogin'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Login
+      tags:
+      - Autenticação
+  /auth/me:
+    get:
+      description: Valida o JWT enviado no cookie e retorna os dados do usuário.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/me.ResponseMe'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/me.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Me
+      tags:
+      - Autenticação
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo usuário com a senha criptografada utilizando bcrypt.
+      parameters:
+      - description: Dados do usuário
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/register.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/register.ResponseRegister'
+        "400":
+          description: Corpo da requisição inválido
+          schema:
+            type: string
+        "500":
+          description: Erro interno do servidor
+          schema:
+            type: string
+      summary: Registrar usuário
+      tags:
+      - Autenticação
+  /products:
+    get:
+      description: Realiza uma consulta de produtos (id 1 ao `limit`)
+      parameters:
+      - description: Quantidade máxima de produtos
+        in: query
+        name: limit
+        type: integer
+      - description: Somente produtos públicos
+        in: query
+        name: publicOnly
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/products.ResponseProducts'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Products
+      tags:
+      - Products
+  /products/{id}:
+    get:
+      description: Retorna todos os dados do produto
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/productIdInfo.Response'
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - CookieAuth: []
+      summary: ProductInfo
+      tags:
+      - Products
+  /system/health:
     get:
       description: Verifica se a API está online
       produces:
@@ -15,5 +253,5 @@ paths:
             type: object
       summary: Health Check
       tags:
-      - System
+      - Health
 swagger: "2.0"

@@ -8,13 +8,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func RegisterRoute(g *echo.Group) {
-	g.POST("/register", RegisterUser)
+func Route(g *echo.Group) {
+	g.POST("/register", UserRegister)
 }
 
 type User struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" example:"User"`
+	Password string `json:"password" example:"123"`
+}
+
+type ResponseRegister struct {
+	Message string `json:"message" example:"User created"`
 }
 
 const InsertUserQuery = `
@@ -22,7 +26,18 @@ const InsertUserQuery = `
 	VALUES (?, ?, ?)
 `
 
-func RegisterUser(c *echo.Context) error {
+// UserRegister
+// @Summary Registrar usuário
+// @Description Cria um novo usuário com a senha criptografada utilizando bcrypt.
+// @Tags Autenticação
+// @Accept json
+// @Produce json
+// @Param request body User true "Dados do usuário"
+// @Success 201 {object} ResponseRegister
+// @Failure 400 {string} string "Corpo da requisição inválido"
+// @Failure 500 {string} string "Erro interno do servidor"
+// @Router /auth/register [post]
+func UserRegister(c *echo.Context) error {
 	user := new(User)
 	if err := c.Bind(user); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
@@ -45,7 +60,7 @@ func RegisterUser(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, map[string]string{
-		"message": "User created",
+	return c.JSON(http.StatusCreated, ResponseRegister{
+		Message: "User created",
 	})
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 
 	"g0/database"
@@ -13,11 +14,16 @@ func main() {
 	if err := database.Connect(); err != nil {
 		log.Fatal(err)
 	}
-	defer database.DB.Close()
+	defer func(DB *sql.DB) {
+		err := DB.Close()
+		if err != nil {
+
+		}
+	}(database.DB)
 
 	e := echo.New()
 
-	routes.RegisterRoute(e)
+	routes.Route(e)
 
 	if err := e.Start(":8080"); err != nil {
 		e.Logger.Error("Failed to start server", "error", err)

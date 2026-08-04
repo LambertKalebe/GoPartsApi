@@ -2,6 +2,7 @@ package login
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
 	"time"
 
@@ -11,13 +12,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func RegisterRoute(g *echo.Group) {
+func Route(g *echo.Group) {
 	g.POST("/login", Login)
 }
 
-type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+type RequestLogin struct {
+	Username string `json:"username" example:"User"`
+	Password string `json:"password" example:"123"`
+}
+
+type ResponseLogin struct {
+	Message string `json:"message" example:"Login realizado com sucesso"`
+	Token   string `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."`
 }
 
 type UserDB struct {
@@ -33,8 +39,20 @@ const CheckUserQuery = `
 	WHERE username = ?;
 `
 
+// Login
+// @Summary Login
+// @Description Realiza autenticação do usuário
+// @Tags Autenticação
+// @Accept json
+// @Produce json
+// @Param request body RequestLogin true "Credenciais"
+// @Success 200 {object} ResponseLogin
+// @Failure 400 {string} string
+// @Failure 401 {string} string
+// @Failure 500 {string} string
+// @Router /auth/login [post]
 func Login(c *echo.Context) error {
-	req := new(LoginRequest)
+	req := new(RequestLogin)
 
 	if err := c.Bind(req); err != nil {
 		return c.String(http.StatusBadRequest, "Corpo da requisição inválido")
@@ -52,7 +70,7 @@ func Login(c *echo.Context) error {
 		&user.Role,
 	)
 
-	if err == sql.ErrNoRows {
+	if errors.Is(err, sql.ErrNoRows) {
 		return c.String(http.StatusUnauthorized, "Usuário ou senha inválidos")
 	}
 
@@ -80,7 +98,7 @@ func Login(c *echo.Context) error {
 	}
 
 	cookie := &http.Cookie{
-		Name:     "Auth",
+		Name:     "token",
 		Value:    token,
 		Expires:  time.Now().Add(24 * 7 * time.Hour),
 		HttpOnly: true,
@@ -90,7 +108,8 @@ func Login(c *echo.Context) error {
 	}
 	c.SetCookie(cookie)
 
-	return c.JSON(http.StatusOK, map[string]string{
-		"message": "Login realizado com sucesso: " + token,
+	return c.JSON(http.StatusOK, ResponseLogin{
+		Message: "Login realizado com sucesso",
+		Token:   token,
 	})
 }
