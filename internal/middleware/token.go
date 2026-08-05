@@ -1,14 +1,13 @@
-package login
+package middleware
 
 import (
+	"g0/internal/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var JWTSecret = []byte("IHave10Dogs")
-
-type Claims struct {
+type claims struct {
 	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
 	Role     string `json:"role"`
@@ -16,7 +15,7 @@ type Claims struct {
 }
 
 func GenerateToken(userID int, username, role string) (string, error) {
-	claims := Claims{
+	claims := claims{
 		UserID:   userID,
 		Username: username,
 		Role:     role,
@@ -29,5 +28,5 @@ func GenerateToken(userID int, username, role string) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return token.SignedString(JWTSecret)
+	return token.SignedString(config.JWTSecret)
 }

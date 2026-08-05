@@ -2,10 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"g0/internal/database"
+	"g0/internal/routes"
 	"log"
-
-	"g0/database"
-	"g0/routes"
 
 	"github.com/labstack/echo/v5"
 )

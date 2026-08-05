@@ -15,9 +15,29 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/aboutme": {
+            "get": {
+                "description": "Retorna informações do usuário.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Dados do usuário",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/auth.aboutMeResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
-                "description": "Realiza autenticação do usuário",
+                "description": "Realiza um login de usuário",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,7 +45,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Autenticação"
+                    "Auth"
                 ],
                 "summary": "Login",
                 "parameters": [
@@ -35,7 +55,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/login.RequestLogin"
+                            "$ref": "#/definitions/auth.loginRequest"
                         }
                     }
                 ],
@@ -43,23 +63,23 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/login.ResponseLogin"
+                            "$ref": "#/definitions/auth.loginResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Corpo da requisição inválido",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "401": {
-                        "description": "Unauthorized",
+                        "description": "Usuário ou senha inválidos",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Erro interno do servidor",
                         "schema": {
                             "type": "string"
                         }
@@ -67,32 +87,21 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/me": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Valida o JWT enviado no cookie e retorna os dados do usuário.",
+        "/auth/logout": {
+            "post": {
+                "description": "Apaga os cookies do usuário.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Autenticação"
+                    "Auth"
                 ],
-                "summary": "Me",
+                "summary": "Fazer logout",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/me.ResponseMe"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/me.ErrorResponse"
+                            "$ref": "#/definitions/auth.logoutResponse"
                         }
                     }
                 }
@@ -100,7 +109,7 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "description": "Cria um novo usuário com a senha criptografada utilizando bcrypt.",
+                "description": "Cria um novo usuário.",
                 "consumes": [
                     "application/json"
                 ],
@@ -108,9 +117,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Autenticação"
+                    "Auth"
                 ],
-                "summary": "Registrar usuário",
+                "summary": "Registrar um novo usuário",
                 "parameters": [
                     {
                         "description": "Dados do usuário",
@@ -118,7 +127,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/register.User"
+                            "$ref": "#/definitions/auth.registerRequest"
                         }
                     }
                 ],
@@ -126,7 +135,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/register.ResponseRegister"
+                            "$ref": "#/definitions/auth.registerResponse"
                         }
                     },
                     "400": {
@@ -215,7 +224,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/productIdInfo.Response"
+                            "$ref": "#/definitions/productIdInfo.response"
                         }
                     },
                     "401": {
@@ -239,10 +248,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/health.healthResponse"
                         }
                     }
                 }
@@ -250,7 +256,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "login.RequestLogin": {
+        "auth.aboutMeResponse": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.loginRequest": {
             "type": "object",
             "properties": {
                 "password": {
@@ -259,11 +279,11 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string",
-                    "example": "User"
+                    "example": "user"
                 }
             }
         },
-        "login.ResponseLogin": {
+        "auth.loginResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -276,54 +296,84 @@ const docTemplate = `{
                 }
             }
         },
-        "me.ErrorResponse": {
+        "auth.logoutResponse": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "invalid or expired jwt"
+                    "example": "Logout realizado com sucesso"
                 }
             }
         },
-        "me.ResponseMe": {
+        "auth.registerRequest": {
             "type": "object",
             "properties": {
-                "user": {
-                    "$ref": "#/definitions/me.UserResponse"
+                "password": {
+                    "type": "string",
+                    "example": "123"
                 },
-                "valid": {
-                    "type": "boolean",
-                    "example": true
+                "username": {
+                    "type": "string",
+                    "example": "user"
                 }
             }
         },
-        "me.UserResponse": {
+        "auth.registerResponse": {
             "type": "object",
             "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "User created"
+                }
+            }
+        },
+        "health.healthResponse": {
+            "type": "object",
+            "properties": {
+                "healthy": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "On"
+                }
+            }
+        },
+        "productIdInfo.product": {
+            "type": "object",
+            "properties": {
+                "application": {},
+                "code": {
+                    "type": "string",
+                    "example": "FAP-2829"
+                },
+                "fiscal_data": {},
                 "id": {
                     "type": "integer",
                     "example": 1
                 },
-                "role": {
+                "images": {},
+                "logistic_data": {},
+                "make": {
                     "type": "string",
-                    "example": "admin"
+                    "example": "WEGA"
                 },
-                "username": {
+                "name": {
                     "type": "string",
-                    "example": "admin"
-                }
+                    "example": "FILTRO DE AR"
+                },
+                "similar_json": {},
+                "tech_data": {}
             }
         },
-        "productIdInfo.Response": {
+        "productIdInfo.response": {
             "type": "object",
             "properties": {
-                "hi": {
-                    "type": "string",
-                    "example": "Hello, World!"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "1"
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/productIdInfo.product"
+                    }
                 }
             }
         },
@@ -372,28 +422,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/products.Product"
                     }
-                }
-            }
-        },
-        "register.ResponseRegister": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "User created"
-                }
-            }
-        },
-        "register.User": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string",
-                    "example": "123"
-                },
-                "username": {
-                    "type": "string",
-                    "example": "User"
                 }
             }
         }

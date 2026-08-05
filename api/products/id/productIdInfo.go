@@ -3,37 +3,33 @@ package productIdInfo
 import (
 	"database/sql"
 	"encoding/json"
-	"g0/database"
+	"g0/internal/database"
 	"net/http"
 
 	"github.com/labstack/echo/v5"
 )
 
 func Route(g *echo.Group) {
-	g.GET("/:id", ProductInfo)
+	g.GET("/:id", productInfo)
 }
 
-type Request struct {
-	ID int64 `json:"id" example:"1"`
+type product struct {
+	Id           int    `json:"id" example:"1"`
+	Code         string `json:"code" example:"FAP-2829"`
+	Name         string `json:"name" example:"FILTRO DE AR"`
+	Make         string `json:"make" example:"WEGA"`
+	TechData     any    `json:"tech_data"`
+	LogisticData any    `json:"logistic_data"`
+	FiscalData   any    `json:"fiscal_data"`
+	SimilarJson  any    `json:"similar_json"`
+	Application  any    `json:"application"`
+	Images       any    `json:"images"`
+}
+type response struct {
+	Products []product `json:"products"`
 }
 
-type Product struct {
-	Id           int             `json:"id" example:"1"`
-	Code         string          `json:"code" example:"FAP-2829"`
-	Name         string          `json:"name" example:"FILTRO DE AR"`
-	Make         string          `json:"make" example:"WEGA"`
-	TechData     json.RawMessage `json:"tech_data" example:"{}"`
-	LogisticData json.RawMessage `json:"logistic_data" example:"{}"`
-	FiscalData   json.RawMessage `json:"fiscal_data" example:"{}"`
-	SimilarJson  json.RawMessage `json:"similar_json" example:"{id,code,make}"`
-	Application  json.RawMessage `json:"application" example:"{make,model,version,year,engine, engine.code,engine.cc,engine.fuel,engine.aspiration,transmission,transmission.code,transmission.name}"`
-	Images       json.RawMessage `json:"images" example:"{id,number,url}"`
-}
-type Response struct {
-	Products []Product `json:"products"`
-}
-
-const GetProductInfoQuery = `
+const getProductInfoQuery = `
 SELECT
     p.id,
     p.code,
@@ -116,21 +112,21 @@ WHERE p.id = ?;
 
 // ProductInfo
 //
-//	@Summary		ProductInfo
-//	@Description	Retorna todos os dados do produto
-//	@Tags			Products
-//	@Security		CookieAuth
+//	@Summary					ProductInfo
+//	@Description				Retorna todos os dados do produto
+//	@Tags						Products
+//	@Security					CookieAuth
 //	@securityDefinitions.apikey	CookieAuth
 //	@in							cookie
 //	@name						token
-//	@Produce		json
-//	@Success		200	{object}	Response
-//	@Failure		401	{object}	error
-//	@Router			/products/{id} [get]
-func ProductInfo(c *echo.Context) error {
+//	@Produce					json
+//	@Success					200	{object}	response
+//	@Failure					401	{object}	error
+//	@Router						/products/{id} [get]
+func productInfo(c *echo.Context) error {
 	id := c.Param("id")
 
-	rows, err := database.DB.Query(GetProductInfoQuery, id)
+	rows, err := database.DB.Query(getProductInfoQuery, id)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -141,13 +137,13 @@ func ProductInfo(c *echo.Context) error {
 		}
 	}(rows)
 
-	resp := Response{
-		Products: []Product{},
+	resp := response{
+		Products: []product{},
 	}
 
 	for rows.Next() {
 		var (
-			p           Product
+			p           product
 			image       sql.NullString
 			fiscal      string
 			logistic    string

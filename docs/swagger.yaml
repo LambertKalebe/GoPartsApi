@@ -1,14 +1,23 @@
 definitions:
-  login.RequestLogin:
+  auth.aboutMeResponse:
+    properties:
+      role:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
+  auth.loginRequest:
     properties:
       password:
         example: "123"
         type: string
       username:
-        example: User
+        example: user
         type: string
     type: object
-  login.ResponseLogin:
+  auth.loginResponse:
     properties:
       message:
         example: Login realizado com sucesso
@@ -17,40 +26,62 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         type: string
     type: object
-  me.ErrorResponse:
+  auth.logoutResponse:
     properties:
       message:
-        example: invalid or expired jwt
+        example: Logout realizado com sucesso
         type: string
     type: object
-  me.ResponseMe:
+  auth.registerRequest:
     properties:
-      user:
-        $ref: '#/definitions/me.UserResponse'
-      valid:
-        example: true
-        type: boolean
+      password:
+        example: "123"
+        type: string
+      username:
+        example: user
+        type: string
     type: object
-  me.UserResponse:
+  auth.registerResponse:
     properties:
+      message:
+        example: User created
+        type: string
+    type: object
+  health.healthResponse:
+    properties:
+      healthy:
+        type: boolean
+      message:
+        example: "On"
+        type: string
+    type: object
+  productIdInfo.product:
+    properties:
+      application: {}
+      code:
+        example: FAP-2829
+        type: string
+      fiscal_data: {}
       id:
         example: 1
         type: integer
-      role:
-        example: admin
+      images: {}
+      logistic_data: {}
+      make:
+        example: WEGA
         type: string
-      username:
-        example: admin
+      name:
+        example: FILTRO DE AR
         type: string
+      similar_json: {}
+      tech_data: {}
     type: object
-  productIdInfo.Response:
+  productIdInfo.response:
     properties:
-      hi:
-        example: Hello, World!
-        type: string
-      id:
-        example: "1"
-        type: string
+      products:
+        items:
+          $ref: '#/definitions/productIdInfo.product'
+        type: array
     type: object
   products.Product:
     properties:
@@ -86,96 +117,88 @@ definitions:
           $ref: '#/definitions/products.Product'
         type: array
     type: object
-  register.ResponseRegister:
-    properties:
-      message:
-        example: User created
-        type: string
-    type: object
-  register.User:
-    properties:
-      password:
-        example: "123"
-        type: string
-      username:
-        example: User
-        type: string
-    type: object
 info:
   contact: {}
 paths:
-  /auth/login:
-    post:
-      consumes:
-      - application/json
-      description: Realiza autenticação do usuário
-      parameters:
-      - description: Credenciais
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/login.RequestLogin'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/login.ResponseLogin'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Login
-      tags:
-      - Autenticação
-  /auth/me:
+  /auth/aboutme:
     get:
-      description: Valida o JWT enviado no cookie e retorna os dados do usuário.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/me.ResponseMe'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/me.ErrorResponse'
-      security:
-      - CookieAuth: []
-      summary: Me
-      tags:
-      - Autenticação
-  /auth/register:
-    post:
-      consumes:
-      - application/json
-      description: Cria um novo usuário com a senha criptografada utilizando bcrypt.
-      parameters:
-      - description: Dados do usuário
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/register.User'
+      description: Retorna informações do usuário.
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/register.ResponseRegister'
+            $ref: '#/definitions/auth.aboutMeResponse'
+      summary: Dados do usuário
+      tags:
+      - Auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Realiza um login de usuário
+      parameters:
+      - description: Credenciais
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.loginResponse'
+        "400":
+          description: Corpo da requisição inválido
+          schema:
+            type: string
+        "401":
+          description: Usuário ou senha inválidos
+          schema:
+            type: string
+        "500":
+          description: Erro interno do servidor
+          schema:
+            type: string
+      summary: Login
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      description: Apaga os cookies do usuário.
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/auth.logoutResponse'
+      summary: Fazer logout
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo usuário.
+      parameters:
+      - description: Dados do usuário
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.registerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/auth.registerResponse'
         "400":
           description: Corpo da requisição inválido
           schema:
@@ -184,9 +207,9 @@ paths:
           description: Erro interno do servidor
           schema:
             type: string
-      summary: Registrar usuário
+      summary: Registrar um novo usuário
       tags:
-      - Autenticação
+      - Auth
   /products:
     get:
       description: Realiza uma consulta de produtos (id 1 ao `limit`)
@@ -230,7 +253,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/productIdInfo.Response'
+            $ref: '#/definitions/productIdInfo.response'
         "401":
           description: Unauthorized
           schema: {}
@@ -248,9 +271,7 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/health.healthResponse'
       summary: Health Check
       tags:
       - Health

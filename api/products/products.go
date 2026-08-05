@@ -2,7 +2,7 @@ package products
 
 import (
 	"database/sql"
-	"g0/database"
+	"g0/internal/database"
 	"net/http"
 
 	"github.com/labstack/echo/v5"
