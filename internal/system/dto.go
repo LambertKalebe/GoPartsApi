@@ -1,4 +1,4 @@
-package health
+package system
 
 type healthResponse struct {
 	Healthy bool

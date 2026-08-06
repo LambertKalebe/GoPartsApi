@@ -1,25 +1,17 @@
 package routes
 
 import (
-	"g0/api/products"
-	productIdInfo "g0/api/products/id"
 	"g0/internal/auth"
-	"g0/internal/health"
-	"g0/internal/middleware"
+	"g0/internal/products"
+	"g0/internal/system"
 
 	"github.com/labstack/echo/v5"
 )
 
 func Route(e *echo.Echo) {
-	api := e.Group("")
-
-	// Rotas públicas
-	authGroup := api.Group("auth")
-	systemGroup := api.Group("system")
-
-	health.Routes(systemGroup)
-	auth.Routes(authGroup)
-
+	system.Routes(e.Group("system"))
+	auth.Routes(e.Group("auth"))
+	products.Routes(e.Group("products"))
 	// OpenAPI
 	e.Static("/openapi", "./docs")
 
@@ -48,12 +40,4 @@ func Route(e *echo.Echo) {
 			`)
 	})
 
-	// Rotas privadas
-	private := api.Group("")
-	private.Use(middleware.JWT)
-
-	productsPrivateGroup := private.Group("/products")
-
-	products.Route(productsPrivateGroup)
-	productIdInfo.Route(productsPrivateGroup)
 }

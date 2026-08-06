@@ -10,7 +10,7 @@ afeta `repository.go`; mudar o formato da resposta só afeta `dto.go` e
 `mapper.go`).
 
 ```
-products/list/
+productsHandler/list/
 ├── routes.go     → registra as rotas do grupo
 ├── handler.go    → camada HTTP (bind, chamada ao service, resposta)
 ├── dto.go        → contratos de entrada/saída da API
@@ -42,7 +42,7 @@ func RegisterRoutes(g *echo.Group) {
 No `internal/server/routes.go` (ou onde você monta os grupos), isso vira:
 
 ```go
-productsGroup := e.Group("/products", middleware.RequireAuth)
+productsGroup := e.Group("/productsHandler", middleware.RequireAuth)
 list.RegisterRoutes(productsGroup)
 ```
 
@@ -75,7 +75,7 @@ type ProductResponse struct {
 }
 
 type ListProductsResponse struct {
-	Products []ProductResponse `json:"products"`
+	Products []ProductResponse `json:"productsHandler"`
 	Total    int               `json:"total" example:"134"`
 	Page     int               `json:"page" example:"1"`
 	Limit    int               `json:"limit" example:"20"`
@@ -129,9 +129,9 @@ func ToProductResponse(p Product, categoryName string) ProductResponse {
 	}
 }
 
-func ToProductResponseList(products []Product, categories map[int]string) []ProductResponse {
-	result := make([]ProductResponse, 0, len(products))
-	for _, p := range products {
+func ToProductResponseList(productsHandler []Product, categories map[int]string) []ProductResponse {
+	result := make([]ProductResponse, 0, len(productsHandler))
+	for _, p := range productsHandler {
 		result = append(result, ToProductResponse(p, categories[p.CategoryID]))
 	}
 	return result
@@ -161,7 +161,7 @@ type Filter struct {
 
 const listProductsQuery = `
 	SELECT p.id, p.name, p.description, p.price, p.category_id, p.stock, p.created_at
-	FROM products p
+	FROM productsHandler p
 	JOIN categories c ON c.id = p.category_id
 	WHERE (? = '' OR c.name = ?)
 	  AND p.price >= ?
@@ -172,7 +172,7 @@ const listProductsQuery = `
 
 const countProductsQuery = `
 	SELECT COUNT(*)
-	FROM products p
+	FROM productsHandler p
 	JOIN categories c ON c.id = p.category_id
 	WHERE (? = '' OR c.name = ?)
 	  AND p.price >= ?
@@ -192,7 +192,7 @@ func FindProducts(f Filter) ([]Product, error) {
 	}
 	defer rows.Close()
 
-	var products []Product
+	var productsHandler []Product
 	for rows.Next() {
 		var p Product
 		if err := rows.Scan(
@@ -201,9 +201,9 @@ func FindProducts(f Filter) ([]Product, error) {
 		); err != nil {
 			return nil, err
 		}
-		products = append(products, p)
+		productsHandler = append(productsHandler, p)
 	}
-	return products, nil
+	return productsHandler, nil
 }
 
 func CountProducts(f Filter) (int, error) {
@@ -248,7 +248,7 @@ func ListProducts(req ListProductsRequest) (ListProductsResponse, error) {
 		Limit:    limit,
 	}
 
-	products, err := FindProducts(filter)
+	productsHandler, err := FindProducts(filter)
 	if err != nil {
 		return ListProductsResponse{}, err
 	}
@@ -261,12 +261,12 @@ func ListProducts(req ListProductsRequest) (ListProductsResponse, error) {
 	// Em um cenário real, isso viria de um repository de categorias,
 	// ou de um JOIN que já traga o nome direto no Product.
 	categories := map[int]string{}
-	for _, p := range products {
+	for _, p := range productsHandler {
 		categories[p.CategoryID] = req.Category
 	}
 
 	return ListProductsResponse{
-		Products: ToProductResponseList(products, categories),
+		Products: ToProductResponseList(productsHandler, categories),
 		Total:    total,
 		Page:     page,
 		Limit:    limit,
@@ -334,7 +334,7 @@ package list
 // @Success 200 {object} ListProductsResponse
 // @Failure 400 {string} string
 // @Failure 500 {string} string
-// @Router /products [get]
+// @Router /productsHandler [get]
 func ProductsDocs() {}
 ```
 
@@ -349,7 +349,7 @@ func ProductsDocs() {}
 ## Fluxo completo da requisição
 
 ```
-GET /products?category=electronics&min_price=50&page=1&limit=10
+GET /productsHandler?category=electronics&min_price=50&page=1&limit=10
         │
         ▼
 routes.go        → direciona para Handler
@@ -364,7 +364,7 @@ Resposta final:
 
 ```json
 {
-  "products": [
+  "productsHandler": [
     {
       "id": 42,
       "name": "Teclado Mecânico RGB",

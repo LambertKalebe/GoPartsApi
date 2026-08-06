@@ -1,4 +1,4 @@
-package health
+package system
 
 func toHealthResponse(healthStatus bool, message string) healthResponse {
 	return healthResponse{

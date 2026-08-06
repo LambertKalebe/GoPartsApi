@@ -1,4 +1,4 @@
-package health
+package system
 
 import "github.com/labstack/echo/v5"
 

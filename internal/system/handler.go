@@ -1,4 +1,4 @@
-package health
+package system
 
 import (
 	"github.com/labstack/echo/v5"
@@ -11,7 +11,7 @@ import (
 // @Tags Health
 // @Produce json
 // @Success 200 {object} healthResponse
-// @Router /system/health [get]
+// @Router /health [get]
 func health(c *echo.Context) error {
 	res := serviceHealth()
 	return c.JSON(200, res)

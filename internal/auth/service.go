@@ -62,6 +62,7 @@ func serviceRegister(req registerRequest) (registerResponse, error) {
 func serviceLogout() logoutResponse {
 	return toLogoutResponse()
 }
+
 func serviceAboutMe(token *jwt.Token) (aboutMeResponse, error) {
 	claims := token.Claims.(jwt.MapClaims)
 
