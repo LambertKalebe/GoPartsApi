@@ -17,8 +17,8 @@ func Connect() error {
 		return err
 	}
 
-	DB.SetMaxOpenConns(0)
-	DB.SetMaxIdleConns(1)
+	DB.SetMaxOpenConns(10)
+	DB.SetMaxIdleConns(5)
 
 	return DB.Ping()
 }

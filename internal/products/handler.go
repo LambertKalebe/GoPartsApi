@@ -9,7 +9,7 @@ import (
 )
 
 // ProductsList
-// @Summary Products List
+// @Summary List
 // @Description Realiza uma consulta de produtos por paginação
 // @Tags Products
 // @Produce json
@@ -38,7 +38,7 @@ func productsHandler(c *echo.Context) error {
 }
 
 // ProductId
-// @Summary Product Id
+// @Summary ID
 // @Description Realiza uma consulta basica de um produto com base no seu ID
 // @Tags Products
 // @Produce json
@@ -63,7 +63,7 @@ func productByIdHandler(c *echo.Context) error {
 }
 
 // ProductDetails
-// @Summary Product Details
+// @Summary Details
 // @Description Realiza uma consulta completa de um produto com base no seu ID
 // @Tags Products
 // @Produce json

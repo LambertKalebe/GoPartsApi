@@ -7,12 +7,6 @@ func toLoginResponse(token string) loginResponse {
 	}
 }
 
-func toRegisterResponse() registerResponse {
-	return registerResponse{
-		Message: "User created",
-	}
-}
-
 func toLogoutResponse() logoutResponse {
 	return logoutResponse{
 		Message: "Logout realizado com sucesso",

@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"g0/internal/database"
 	"g0/internal/routes"
 	"log"
@@ -13,6 +14,8 @@ func main() {
 	if err := database.Connect(); err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("Connected to database: ", database.DB.Stats())
 	defer func(DB *sql.DB) {
 		err := DB.Close()
 		if err != nil {

@@ -5,8 +5,7 @@ import (
 )
 
 // Health
-//
-// @Summary Health Check
+// @Summary Check
 // @Description Verifica se a API está online
 // @Tags Health
 // @Produce json

@@ -1,7 +1,8 @@
 package search
 
 type productSearchRequest struct {
-	Query string
+	Search string `query:"search" example:"KL582"`
+	Limit  int    `query:"limit" example:"1"`
 }
 
 type productSearchResponse struct {

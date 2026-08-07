@@ -33,21 +33,6 @@ LIMIT ?
 OFFSET ?;
 `
 
-const getProductDetailByIdQuery = `
-SELECT
-    p.id,
-    p.code,
-    p.name,
-    m.name AS make,
-    p.tech_data,
-    p.logistic_data,
-    p.fiscal_data
-FROM products p
-LEFT JOIN makes m
-    ON m.id = p.make_id
-WHERE p.id = ?;
-`
-
 const getProductByIdQuery = `
 SELECT
     p.id,
@@ -65,6 +50,21 @@ SELECT
         WHERE pi.product_id = p.id
         LIMIT 1
     ) AS image
+FROM products p
+LEFT JOIN makes m
+    ON m.id = p.make_id
+WHERE p.id = ?;
+`
+
+const getProductDetailByIdQuery = `
+SELECT
+    p.id,
+    p.code,
+    p.name,
+    m.name AS make,
+    p.tech_data,
+    p.logistic_data,
+    p.fiscal_data
 FROM products p
 LEFT JOIN makes m
     ON m.id = p.make_id

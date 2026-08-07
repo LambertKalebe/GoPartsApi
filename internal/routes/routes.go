@@ -3,6 +3,7 @@ package routes
 import (
 	"g0/internal/auth"
 	"g0/internal/products"
+	"g0/internal/search"
 	"g0/internal/system"
 
 	"github.com/labstack/echo/v5"
@@ -12,6 +13,8 @@ func Route(e *echo.Echo) {
 	system.Routes(e.Group("system"))
 	auth.Routes(e.Group("auth"))
 	products.Routes(e.Group("products"))
+	search.Routes(e.Group("search"))
+
 	// OpenAPI
 	e.Static("/openapi", "./docs")
 

@@ -64,7 +64,7 @@ func logoutCookie() *http.Cookie {
 }
 
 // Register
-// @Summary Registrar um novo usuário
+// @Summary Register
 // @Description Cria um novo usuário.
 // @Tags Auth
 // @Accept json
@@ -89,7 +89,7 @@ func register(c *echo.Context) error {
 }
 
 // Logout
-// @Summary Fazer logout
+// @Summary Logout
 // @Description Apaga os cookies do usuário.
 // @Tags Auth
 // @Produce json
@@ -102,7 +102,7 @@ func logout(c *echo.Context) error {
 }
 
 // aboutMe
-// @Summary Dados do usuário
+// @Summary aboutMe
 // @Description Retorna informações do usuário.
 // @Tags Auth
 // @Produce json
