@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/go,intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=go,intellij
 
+### Markdown ###
+todo.md
+
 ### SQLite ###
 # SQLite database file
 *.sqlite

@@ -5,6 +5,7 @@ import (
 	"g0/internal/products"
 	"g0/internal/search"
 	"g0/internal/system"
+	"g0/internal/vehicles"
 
 	"github.com/labstack/echo/v5"
 )
@@ -13,6 +14,7 @@ func Route(e *echo.Echo) {
 	system.Routes(e.Group("system"))
 	auth.Routes(e.Group("auth"))
 	products.Routes(e.Group("products"))
+	vehicles.Routes(e.Group("vehicles"))
 	search.Routes(e.Group("search"))
 
 	// OpenAPI

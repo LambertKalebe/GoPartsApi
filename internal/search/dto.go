@@ -8,3 +8,12 @@ type productSearchRequest struct {
 type productSearchResponse struct {
 	Products []product
 }
+
+type carSearchResponse struct {
+	Cars []car
+}
+
+type carSearchRequest struct {
+	Search string `query:"search" example:"Fox 2009"`
+	Limit  int    `query:"limit" example:"1"`
+}

@@ -7,5 +7,6 @@ import (
 )
 
 func Routes(g *echo.Group) {
-	g.GET("", productSearchHandler, middleware.JWT)
+	g.GET("/products", productSearchHandler, middleware.JWT)
+	g.GET("/cars", carSearchHandler, middleware.JWT)
 }

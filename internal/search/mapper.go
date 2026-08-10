@@ -28,3 +28,26 @@ func toProductSearchResponse(rows *sql.Rows) (productSearchResponse, error) {
 	}
 	return resp, nil
 }
+
+func toCarSearchResponse(rows *sql.Rows) (carSearchResponse, error) {
+	resp := carSearchResponse{}
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+	for rows.Next() {
+		var c car
+
+		_ = rows.Scan(
+			&c.ID,
+			&c.Make,
+			&c.Model,
+			&c.Version,
+			&c.Year,
+			&c.EngineCode,
+			&c.TransmissionType,
+		)
+
+		resp.Cars = append(resp.Cars, c)
+	}
+	return resp, nil
+}

@@ -6,7 +6,7 @@ import (
 
 func serviceHealth() healthResponse {
 	if database.Connect() != nil {
-		return toHealthResponse(false, "OK")
+		return toHealthResponse(false, "Database connection failed")
 	}
 	return toHealthResponse(true, "OK")
 }

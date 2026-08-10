@@ -1,6 +1,8 @@
 package system
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v5"
 )
 
@@ -13,5 +15,8 @@ import (
 // @Router /health [get]
 func health(c *echo.Context) error {
 	res := serviceHealth()
-	return c.JSON(200, res)
+	if res.Healthy == false {
+		return c.JSON(http.StatusServiceUnavailable, res)
+	}
+	return c.JSON(http.StatusOK, res)
 }

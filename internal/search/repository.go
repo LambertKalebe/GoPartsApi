@@ -38,6 +38,28 @@ ORDER BY
 LIMIT ?;
 `
 
+const carSearchQuery = `
+SELECT
+    v.id,
+    m.name AS make,
+    v.model,
+    v.version,
+    v.year,
+    e.code AS engineCode,
+    t.code AS transmissionCode
+FROM fts5_vehicles f
+JOIN vehicles v
+    ON v.id = f.rowid
+LEFT JOIN makes m
+    ON m.id = v.make_id
+LEFT JOIN engine_configs e
+    ON e.id = v.engine_id
+LEFT JOIN transmissions t
+    ON t.id = v.transmission_id
+WHERE fts5_vehicles MATCH ?
+LIMIT ?;
+`
+
 func searchProducts(search string, limit int) (*sql.Rows, error) {
 
 	fmt.Println("search:", search)
@@ -53,5 +75,22 @@ func searchProducts(search string, limit int) (*sql.Rows, error) {
 		return nil, err
 	}
 
+	return rows, nil
+}
+
+func searchCars(search string, limit int) (*sql.Rows, error) {
+	fmt.Println("SEARCH CARS:")
+	fmt.Println("search:", search)
+	fmt.Println("limit:", limit)
+
+	rows, err := database.DB.Query(
+		carSearchQuery,
+		search,
+		limit,
+	)
+	if err != nil {
+		fmt.Println("Repository:", err)
+		return nil, err
+	}
 	return rows, nil
 }

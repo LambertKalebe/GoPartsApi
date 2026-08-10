@@ -1,6 +1,6 @@
 package config
 
 var (
-	DatabaseUrl = "internal/database/cartalogoDb.sqlite"
-	JWTSecret   = []byte("IHave10Dogs")
+	DatabaseUrl = "internal/database/cartalogo.sqlite"
+	JWTSecret   = []byte("IHave11DogsAnd1Cat")
 )

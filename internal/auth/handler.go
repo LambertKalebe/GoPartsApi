@@ -81,6 +81,9 @@ func register(c *echo.Context) error {
 	}
 
 	res, err := serviceRegister(*req)
+	if errors.Is(err, errUserAlreadyExists) {
+		return c.String(http.StatusConflict, "Usuário já existe")
+	}
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -93,7 +96,7 @@ func register(c *echo.Context) error {
 // @Description Apaga os cookies do usuário.
 // @Tags Auth
 // @Produce json
-// @Success 201 {object} logoutResponse
+// @Success 200 {object} logoutResponse
 // @Router /auth/logout [post]
 func logout(c *echo.Context) error {
 	res := serviceLogout()
@@ -109,7 +112,13 @@ func logout(c *echo.Context) error {
 // @Success 201 {object} aboutMeResponse
 // @Router /auth/aboutme [get]
 func aboutMe(c *echo.Context) error {
+	if c.Get("user") == nil {
+		return c.String(http.StatusUnauthorized, "Usuário não logado")
+	}
 	token := c.Get("user").(*jwt.Token)
+	if token == nil {
+		return c.String(http.StatusUnauthorized, "Usuário não autenticado")
+	}
 	res, err := serviceAboutMe(token)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())

@@ -15,6 +15,9 @@ func serviceProducts(qnt int, page int, public bool) (productsResponse, error) {
 	if err != nil {
 		return productsResponse{}, err
 	}
+	if len(res.Products) == 0 {
+		return productsResponse{}, errors.New("no products found")
+	}
 
 	return res, nil
 

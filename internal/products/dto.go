@@ -8,7 +8,7 @@ type productRequest struct {
 
 type productsResponse struct {
 	Page     int       `json:"page"`
-	Products []product `json:"productsHandler"`
+	Products []product `json:"products"`
 }
 
 type productByIdResponse struct {
@@ -16,5 +16,5 @@ type productByIdResponse struct {
 }
 
 type productDetailsByIdResponse struct {
-	Product []productDetails `json:"productsHandler"`
+	Product []productDetails `json:"product"`
 }
