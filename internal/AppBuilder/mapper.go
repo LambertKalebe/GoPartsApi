@@ -2,77 +2,50 @@ package appbuilder
 
 import (
 	"database/sql"
+	"fmt"
 	"strings"
-	"sync"
 )
 
-func toCarSearchResponse(rowsList []*sql.Rows) (carSearchResponse, error) {
-	var resp carSearchResponse
+func toAppBuilderSearchResponse(rows *sql.Rows, search string) (appBuilderSearchResponse, error) {
+	var resp appBuilderSearchResponse
 
-	var wg sync.WaitGroup
-	var mu sync.Mutex
+	defer rows.Close()
 
-	errCh := make(chan error, len(rowsList))
+	cars := make([]car, 0)
 
-	for _, rows := range rowsList {
-		if rows == nil {
-			continue
-		}
+	for rows.Next() {
+		var c car
+		var ccNormalized sql.NullString
+		var valves sql.NullString
 
-		wg.Add(1)
-
-		go func(rows *sql.Rows) {
-			defer wg.Done()
-			defer rows.Close()
-
-			var cars []car
-
-			for rows.Next() {
-				var c car
-				var ccNormalized sql.NullString
-				var valves sql.NullString
-
-				err := rows.Scan(
-					&c.ID,
-					&c.Make,
-					&c.Model,
-					&c.Version,
-					&ccNormalized,
-					&valves,
-					&c.Year,
-				)
-				if err != nil {
-					errCh <- err
-					return
-				}
-
-				c.ConfigMotor = strings.TrimSpace(
-					ccNormalized.String + " " + valves.String,
-				)
-
-				cars = append(cars, c)
-			}
-
-			if err := rows.Err(); err != nil {
-				errCh <- err
-				return
-			}
-
-			mu.Lock()
-			resp.Cars = append(resp.Cars, cars...)
-			mu.Unlock()
-
-		}(rows)
-	}
-
-	wg.Wait()
-	close(errCh)
-
-	for err := range errCh {
+		err := rows.Scan(
+			&c.ID,
+			&c.Make,
+			&c.Model,
+			&c.Version,
+			&ccNormalized,
+			&valves,
+			&c.Year,
+		)
 		if err != nil {
-			return carSearchResponse{}, err
+			return resp, err
 		}
+
+		c.ConfigMotor = strings.TrimSpace(
+			ccNormalized.String + " " + valves.String,
+		)
+
+		cars = append(cars, c)
 	}
+
+	if err := rows.Err(); err != nil {
+		return resp, err
+	}
+
+	resp.Cars = cars
+	resp.Search = search
+
+	fmt.Println("resp:", resp)
 
 	return resp, nil
 }

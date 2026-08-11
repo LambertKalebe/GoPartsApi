@@ -1,6 +1,7 @@
 package routes
 
 import (
+	appbuilder "g0/internal/AppBuilder"
 	"g0/internal/auth"
 	"g0/internal/products"
 	"g0/internal/search"
@@ -16,6 +17,7 @@ func Route(e *echo.Echo) {
 	products.Routes(e.Group("products"))
 	vehicles.Routes(e.Group("vehicles"))
 	search.Routes(e.Group("search"))
+	appbuilder.Routes(e.Group("appbuilder"))
 
 	// OpenAPI
 	e.Static("/openapi", "./docs")

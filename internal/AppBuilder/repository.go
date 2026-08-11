@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"g0/internal/database"
-	"sync"
 )
 
 const appBuilderSearchQuery = `
@@ -28,51 +27,13 @@ WHERE fts5_vehicles MATCH ?
 
 // Split tokens in "token" "token2", etc
 // Dessa forma a pesquisa de 1.0, 1.6 funciona
-func appBuilderSearch(search []carSearchRequest) ([]*sql.Rows, error) {
-	var wg sync.WaitGroup
+func appBuilderSearch(search string) (*sql.Rows, error) {
 
-	results := make([]*sql.Rows, len(search))
-	errCh := make(chan error, len(search))
-
-	for i := range search {
-		i := i
-		req := search[i]
-
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-
-			fmt.Println("search:", req)
-
-			rows, err := database.DB.Query(
-				appBuilderSearchQuery,
-				req.Search,
-			)
-			if err != nil {
-				errCh <- err
-				return
-			}
-
-			results[i] = rows
-		}()
+	rows, err := database.DB.Query(appBuilderSearchQuery, search)
+	if err != nil {
+		fmt.Println("Repository:", err)
+		return nil, err
 	}
 
-	wg.Wait()
-	close(errCh)
-
-	for err := range errCh {
-		if err != nil {
-			// Se alguma query falhar, fecha as que já foram abertas.
-			for _, rows := range results {
-				if rows != nil {
-					_ = rows.Close()
-				}
-			}
-
-			return nil, err
-		}
-	}
-
-	return results, nil
+	return rows, nil
 }
