@@ -56,7 +56,7 @@ type application struct {
 type engine struct {
 	Code       string `json:"code"`
 	Valves     string `json:"valves"`
-	CC         int    `json:"cc"`
+	CC         string `json:"cc"`
 	Fuel       string `json:"fuel"`
 	Aspiration string `json:"aspiration"`
 }

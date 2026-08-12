@@ -2,8 +2,8 @@ package export
 
 import "database/sql"
 
-func toProductImageDownloadResponse(rows *sql.Rows) (productImageDownloadResponse, error) {
-	resp := productImageDownloadResponse{}
+func toProductImageDownloadResponse(rows *sql.Rows) (productImageQueryResponse, error) {
+	resp := productImageQueryResponse{}
 	defer func(rows *sql.Rows) {
 		_ = rows.Close()
 	}(rows)
@@ -12,7 +12,6 @@ func toProductImageDownloadResponse(rows *sql.Rows) (productImageDownloadRespons
 		var i image
 
 		_ = rows.Scan(
-			&i.ID,
 			&i.URL,
 		)
 

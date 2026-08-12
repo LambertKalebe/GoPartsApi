@@ -3,6 +3,7 @@ package routes
 import (
 	appbuilder "g0/internal/AppBuilder"
 	"g0/internal/auth"
+	"g0/internal/export"
 	"g0/internal/products"
 	"g0/internal/search"
 	"g0/internal/system"
@@ -18,6 +19,7 @@ func Route(e *echo.Echo) {
 	vehicles.Routes(e.Group("vehicles"))
 	search.Routes(e.Group("search"))
 	appbuilder.Routes(e.Group("appbuilder"))
+	export.Routes(e.Group("export"))
 
 	// OpenAPI
 	e.Static("/openapi", "./docs")
@@ -46,5 +48,4 @@ func Route(e *echo.Echo) {
 			</html>
 			`)
 	})
-
 }

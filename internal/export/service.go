@@ -1,17 +1,17 @@
 package export
 
-func serviceGetProductImagesUrl(productId int) (productImageDownloadResponse, error) {
+func serviceGetProductImageUrl(productId int) (productImageQueryResponse, error) {
 	req := productImageDownloadRequest{
 		ProductId: productId,
 	}
-	url, err := getProductImagesUrl(req.ProductId)
+	urls, err := getProductImagesUrl(req.ProductId)
 	if err != nil {
-		return productImageDownloadResponse{}, err
+		return productImageQueryResponse{}, err
 	}
 
-	res, err := toProductImageDownloadResponse(url)
+	res, err := toProductImageDownloadResponse(urls)
 	if err != nil {
-		return productImageDownloadResponse{}, err
+		return productImageQueryResponse{}, err
 	}
 
 	return res, nil

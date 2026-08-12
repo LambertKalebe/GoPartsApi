@@ -3,6 +3,7 @@ package search
 import (
 	"errors"
 	"fmt"
+	"g0/internal/global"
 	"strings"
 )
 
@@ -30,8 +31,9 @@ func serviceSearchProducts(search string, limit int) (productSearchResponse, err
 	if search == "" {
 		return productSearchResponse{}, errors.New("invalid query")
 	}
-	fmt.Println("service", search)
-	rows, err := searchProducts(search, limit)
+	quoted := global.QuoteTokens([]string{search})[0]
+	fmt.Println("service", quoted)
+	rows, err := searchProducts(quoted, limit)
 	if err != nil {
 		fmt.Println("service", err)
 		return productSearchResponse{}, err
@@ -65,8 +67,9 @@ func serviceSearchCars(search string, limit int) (carSearchResponse, error) {
 	if search == "" {
 		return carSearchResponse{}, errors.New("invalid query")
 	}
-	fmt.Println("service", search)
-	rows, err := searchCars(search, limit)
+	quoted := global.QuoteTokens([]string{search})[0]
+	fmt.Println("service", quoted)
+	rows, err := searchCars(quoted, limit)
 	if err != nil {
 		fmt.Println("service", err)
 		return carSearchResponse{}, err

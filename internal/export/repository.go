@@ -7,14 +7,13 @@ import (
 
 const getProductImagesUrlQuery = `
 SELECT
-    id,
     url
 FROM product_images
 WHERE product_id = ?
 `
 
 func getProductImagesUrl(productId int) (*sql.Rows, error) {
-	rows, err := database.DB.Query(getProductImagesUrlQuery, id)
+	rows, err := database.DB.Query(getProductImagesUrlQuery, productId)
 	if err != nil {
 		return nil, err
 	}

@@ -92,7 +92,7 @@ SELECT
 
     ec.code AS engine_code,
     ec.valves,
-    ec.cc,
+    printf('%.1f', ec.cc_normalized) AS cc,
     ec.fuel,
     ec.aspiration,
 
