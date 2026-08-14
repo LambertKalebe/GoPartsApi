@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"g0/internal/config"
 	"g0/internal/database"
 	"g0/internal/routes"
 	"log"
@@ -11,6 +12,7 @@ import (
 )
 
 func main() {
+	fmt.Println("DatabaseUrl:", config.GetDatabasePath())
 	if err := database.Connect(); err != nil {
 		log.Fatal(err)
 	}

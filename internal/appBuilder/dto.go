@@ -1,7 +1,7 @@
 package appbuilder
 
 type appBuilderSearchResponse struct {
-	Search string
+	Search string `example:"Fox Plus 1.6 8V 2009"`
 	Cars   []car
 }
 
@@ -16,10 +16,6 @@ type yearCandidate struct {
 	Value string
 }
 
-type debugResponse struct {
-	Debug string
-}
-
 type appBuilderSearchRequest struct {
-	Search []string `json:"search" example:"Fox 2009"`
+	Search []string `json:"search" example:"Fox Plus 1.6 8V 2009"`
 }

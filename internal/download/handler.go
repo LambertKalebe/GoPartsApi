@@ -1,4 +1,4 @@
-package export
+package download
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ import (
 // @Param id query int true "ID do produto"
 // @Param index query int true "Indice da imagem"
 // @Router /export/images [get]
-// @Success 200 {object} productImageDownloadResponse
+// @Success 200 {object} string
 // @Failure 400 {string} string
 // @Failure 401 {string} string
 // @Failure 500 {string} string
@@ -77,4 +77,55 @@ func imagesExportHandler(c *echo.Context) error {
 		resp.Body,
 	)
 
+}
+
+// @Summary Applications
+// @Description Baixa as aplicações informadas no formato de csv
+// @Tags Download
+// @Produce json
+// @Param id body appDownloadRequest true "Ids dos veiculos"
+// @Router /export/apps [post]
+// @Success 200 {object} string
+// @Failure 400 {string} string
+// @Failure 401 {string} string
+// @Failure 500 {string} string
+func appExportHandler(c *echo.Context) error {
+	req := new(appDownloadRequest)
+
+	if err := c.Bind(req); err != nil {
+		return c.String(
+			http.StatusBadRequest,
+			"Corpo da requisição inválido",
+		)
+	}
+
+	fmt.Printf("Handler Search: %#v\n", req.CarId)
+	fmt.Printf("Handler Search Product: %#v\n", req.ProductId)
+	fmt.Println("-----------------------------------")
+
+	resp, err := serviceAppDownload(req.CarId, req.ProductId)
+	if err != nil {
+		return c.String(
+			http.StatusInternalServerError,
+			err.Error(),
+		)
+	}
+
+	c.Response().Header().Set(
+		"Content-Type",
+		"text/csv; charset=windows-1252",
+	)
+
+	c.Response().Header().Set(
+		"Content-Disposition",
+		`attachment; filename="compat.csv"`,
+	)
+
+	fmt.Printf("Bytes enviados: % X\n", resp)
+
+	return c.Blob(
+		http.StatusOK,
+		"text/csv; charset=windows-1252",
+		resp,
+	)
 }

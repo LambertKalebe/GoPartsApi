@@ -1,9 +1,9 @@
 package routes
 
 import (
-	appbuilder "g0/internal/AppBuilder"
+	"g0/internal/appBuilder"
 	"g0/internal/auth"
-	"g0/internal/export"
+	"g0/internal/download"
 	"g0/internal/products"
 	"g0/internal/search"
 	"g0/internal/system"
@@ -19,13 +19,13 @@ func Route(e *echo.Echo) {
 	vehicles.Routes(e.Group("vehicles"))
 	search.Routes(e.Group("search"))
 	appbuilder.Routes(e.Group("appbuilder"))
-	export.Routes(e.Group("export"))
+	download.Routes(e.Group("export"))
 
 	// OpenAPI
 	e.Static("/openapi", "./docs")
 
 	// Scalar
-	e.GET("/docs", func(c *echo.Context) error {
+	e.GET("/", func(c *echo.Context) error {
 		return c.HTML(200, `
 			<!doctype html>
 			<html>
