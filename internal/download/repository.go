@@ -21,7 +21,7 @@ SELECT
     v.version AS modelo,     
     e.code AS motor,     
     TRIM(         
-        COALESCE(CAST(e.cc_normalized AS TEXT), '') ||         
+        COALESCE(printf('%.1f', e.cc_normalized), '') ||         
         CASE             
             WHEN e.cc_normalized IS NOT NULL AND e.valves IS NOT NULL             
             THEN ' '             
@@ -45,9 +45,9 @@ SELECT
     m.name AS montadora,
     v.model AS veiculo,
     v.version AS modelo,
-    e.code AS motor,
+    COALESCE(e.code, '') AS motor,
     TRIM(
-        COALESCE(CAST(e.cc_normalized AS TEXT), '') ||
+        COALESCE(printf('%%.1f', e.cc_normalized), '') ||
         CASE
             WHEN e.cc_normalized IS NOT NULL AND e.valves IS NOT NULL
             THEN ' '
@@ -55,10 +55,10 @@ SELECT
         END ||
         COALESCE(e.valves, '')
     ) AS config_motor,
-    t.name AS transmissao,
-    e.fuel AS combustivel,
-    v.year AS ano_inicio,
-    v.year AS ano_fim
+    COALESCE(t.name, '') AS transmissao,
+    COALESCE(e.fuel, '') AS combustivel,
+    COALESCE(v.year, 0) AS ano_inicio,
+    COALESCE(v.year, 0) AS ano_fim
 FROM vehicles v
 JOIN makes m
     ON m.id = v.make_id
@@ -67,7 +67,7 @@ LEFT JOIN engine_configs e
 LEFT JOIN transmissions t
     ON t.id = v.transmission_id
 WHERE v.id IN (%s)
-  ORDER BY v.make_id;
+ORDER BY v.make_id;
 `
 
 func getProductImagesUrl(productId int) (*sql.Rows, error) {
@@ -82,11 +82,11 @@ func getProductImagesUrl(productId int) (*sql.Rows, error) {
 
 func getApps(vehicleIDs []int, productId int) (*sql.Rows, error) {
 	if len(vehicleIDs) != 0 && productId != 0 {
-		return nil, errors.New("Apenas um dos dois parametros pode ser selecionado: veiculo ou produto")
+		return nil, errors.New("apenas um dos dois parâmetros pode ser selecionado: veiculo ou produto")
 	}
 
 	if len(vehicleIDs) == 0 && productId == 0 {
-		return nil, errors.New("Nenhum veiculo ou produto foi selecionado")
+		return nil, errors.New("nenhum veiculo ou produto foi selecionado")
 	}
 	var rows *sql.Rows
 	var err error

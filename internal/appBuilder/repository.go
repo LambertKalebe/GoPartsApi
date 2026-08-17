@@ -12,7 +12,7 @@ SELECT
     m.name AS make,
     v.model,
     v.version,
-    e.cc_normalized AS cc,
+    COALESCE(printf('%.1f', e.cc_normalized), '') AS cc,
     e.valves AS valves,
     v.year
 FROM fts5_vehicles f
@@ -25,8 +25,6 @@ LEFT JOIN engine_configs e
 WHERE fts5_vehicles MATCH ?
 `
 
-// Split tokens in "token" "token2", etc
-// Dessa forma a pesquisa de 1.0, 1.6 funciona
 func appBuilderSearch(search string) (*sql.Rows, error) {
 
 	rows, err := database.DB.Query(appBuilderSearchQuery, search)

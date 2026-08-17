@@ -7,8 +7,6 @@ import (
 	"io"
 
 	"github.com/gocarina/gocsv"
-	"golang.org/x/text/encoding/charmap"
-	"golang.org/x/text/transform"
 )
 
 func serviceGetProductImageUrl(productId int) (productImageQueryResponse, error) {
@@ -36,6 +34,15 @@ func serviceAppDownload(vehicleIDs []int, productId int) ([]byte, error) {
 	vehicles, err := formatSqlAppResponse(rows)
 	// Configuração do CSV
 	gocsv.SetCSVWriter(func(out io.Writer) *gocsv.SafeCSVWriter {
+		// Adiciona o BOM, por mais que não seja necessário, foi adicionado devido a outro setor da empresa que pediu
+		_, err := out.Write([]byte{0xEF, 0xBB, 0xBF})
+		if err != nil {
+			return nil
+		}
+		_, err2 := out.Write([]byte{0xEF, 0xBB, 0xBF})
+		if err2 != nil {
+			return nil
+		}
 		writer := csv.NewWriter(out)
 		writer.UseCRLF = true
 		writer.Comma = ';'
@@ -52,10 +59,5 @@ func serviceAppDownload(vehicleIDs []int, productId int) ([]byte, error) {
 		return nil, fmt.Errorf("erro ao gerar CSV: %w", err)
 	}
 
-	// UTF-8 -> Windows-1252
-	converted, _, err := transform.Bytes(
-		charmap.Windows1252.NewEncoder(),
-		utf8Buffer.Bytes())
-
-	return converted, nil
+	return utf8Buffer.Bytes(), nil
 }

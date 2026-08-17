@@ -51,7 +51,6 @@ func formatSqlAppResponse(rows *sql.Rows) ([]vehicle, error) {
 		}
 
 		v.Obs = ""
-		v.limparAcentos()
 		res = append(res, v)
 	}
 

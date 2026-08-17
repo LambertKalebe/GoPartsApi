@@ -112,11 +112,6 @@ func appExportHandler(c *echo.Context) error {
 	}
 
 	c.Response().Header().Set(
-		"Content-Type",
-		"text/csv; charset=windows-1252",
-	)
-
-	c.Response().Header().Set(
 		"Content-Disposition",
 		`attachment; filename="compat.csv"`,
 	)
@@ -125,7 +120,7 @@ func appExportHandler(c *echo.Context) error {
 
 	return c.Blob(
 		http.StatusOK,
-		"text/csv; charset=windows-1252",
+		"text/csv;charset=utf-8",
 		resp,
 	)
 }
