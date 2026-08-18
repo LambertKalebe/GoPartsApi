@@ -3,8 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"g0/internal/common"
 	"g0/internal/config"
 	"g0/internal/database"
+	"g0/internal/http"
+	"g0/internal/middleware"
 	"g0/internal/routes"
 	"log"
 
@@ -26,10 +29,11 @@ func main() {
 	}(database.DB)
 
 	e := echo.New()
+	e.HTTPErrorHandler = httpcustom.HTTPErrorHandler
+	common.NewLogger()                  // new
+	e.Use(middleware.LoggingMiddleware) // new
 
 	routes.Route(e)
+	common.Logger.LogInfo().Msg(e.Start(":8080").Error())
 
-	if err := e.Start(":8080"); err != nil {
-		e.Logger.Error("Failed to start server", "error", err)
-	}
 }

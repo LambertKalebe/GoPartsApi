@@ -3,7 +3,6 @@ package vehicles
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 )
 
 func serviceVehicles(qnt int, page int) (vehiclesResponse, error) {
@@ -42,19 +41,15 @@ func serviceVehicleDetailsById(id int) (vehicleDetailsByIdResponse, error) {
 	if errors.Is(err, sql.ErrNoRows) {
 		return vehicleDetailsByIdResponse{}, errors.New("invalid query")
 	}
-	fmt.Println("Service Data\n", data)
 
 	apps, err := getVehicleAppsByProductId(id)
 	if err != nil {
 		return vehicleDetailsByIdResponse{}, err
 	}
-	fmt.Println("Service Apps\n", apps)
 
 	res, err := toVehicleDetailsResponse(data, apps)
 	if err != nil {
-		fmt.Println("Service Error\n", err)
 		return vehicleDetailsByIdResponse{}, err
 	}
-	fmt.Println("Service \n", res)
 	return res, nil
 }

@@ -1,7 +1,7 @@
 package products
 
 type productRequest struct {
-	Qnt        int  `query:"limit" example:"100"`
+	Limit      int  `query:"limit" example:"100"`
 	Page       int  `query:"page" example:"1"`
 	PublicOnly bool `query:"publicOnly" example:"true"`
 }

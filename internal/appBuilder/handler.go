@@ -1,7 +1,6 @@
 package appbuilder
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v5"
@@ -9,30 +8,31 @@ import (
 
 // Appbuilder
 // @Summary Search
-// @Description Realiza uma consulta de produtos por por um request de uma ou mais linhas
+// @Description Realiza uma consulta de carros por um request de uma ou mais linhas
 // @Tags AppBuilder
 // @Produce json
 // @Param search body appBuilderSearchRequest true "Linhas de pesquisa"
 // @Accept json
 // @Router /appbuilder [post]
-// @Success 200 {object} appBuilderSearchResponse
-// @Failure 400 {string} string
-// @Failure 401 {string} string
-// @Failure 500 {string} string
+// @Success 200 {object} appBuilderResponse
+// @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
+// @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
+// @Failure 404 {object} httpcustom.ErrorResponse "Recurso não encontrado"
+// @Failure 500 {object} httpcustom.ErrorResponse "Erro interno do servidor"
 func appBuilderHandler(c *echo.Context) error {
 	req := new(appBuilderSearchRequest)
 	if err := c.Bind(req); err != nil {
-		return c.String(http.StatusBadRequest, "Corpo da requisição inválido")
+		return echo.NewHTTPError(
+			http.StatusBadRequest, "Corpo da requisição inválido")
 	}
-
-	fmt.Printf("Handler Search: %#v\n", req.Search)
-	fmt.Println("-----------------------------------")
 
 	res, err := serviceAppBuilder(req.Search)
-	if err != nil {
-		fmt.Println("Handler", err)
-		return c.String(http.StatusInternalServerError, err.Error())
-	}
 
+	if err != nil {
+		return echo.NewHTTPError(
+			http.StatusUnauthorized,
+			"Usuário ou senha inválidos",
+		)
+	}
 	return c.JSON(http.StatusOK, res)
 }

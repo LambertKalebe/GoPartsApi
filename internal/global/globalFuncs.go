@@ -3,6 +3,7 @@
 package global
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -20,7 +21,27 @@ func QuoteTokens(search []string) []string {
 		result[i] = strings.Join(tokens, " ")
 	}
 
-	fmt.Println("quoteTokens", result)
-
 	return result
+}
+
+type JsonMap map[string]any
+
+func (j *JsonMap) Scan(value any) error {
+	if value == nil {
+		*j = nil
+		return nil
+	}
+
+	var data []byte
+
+	switch v := value.(type) {
+	case string:
+		data = []byte(v)
+	case []byte:
+		data = v
+	default:
+		return fmt.Errorf("JSONMap: tipo inesperado %T", value)
+	}
+
+	return json.Unmarshal(data, j)
 }

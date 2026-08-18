@@ -2,7 +2,6 @@ package products
 
 import (
 	"database/sql"
-	"encoding/json"
 )
 
 func toProductsResponse(rows *sql.Rows, page int) (productsResponse, error) {
@@ -68,9 +67,6 @@ func toProductDetailsResponse(productDetailsRow *sql.Row, productImagesRows *sql
 	var img image
 	var s similar
 	var app application
-	var techJSON string
-	var logisticJSON string
-	var fiscalJSON string
 
 	resp := productDetailsByIdResponse{}
 
@@ -139,22 +135,10 @@ func toProductDetailsResponse(productDetailsRow *sql.Row, productImagesRows *sql
 		&p.Code,
 		&p.Name,
 		&p.Make,
-		&techJSON,
-		&logisticJSON,
-		&fiscalJSON,
+		&p.TechData,
+		&p.LogisticData,
+		&p.FiscalData,
 	)
-
-	if err := json.Unmarshal([]byte(techJSON), &p.TechData); err != nil {
-		return resp, err
-	}
-
-	if err := json.Unmarshal([]byte(logisticJSON), &p.LogisticData); err != nil {
-		return resp, err
-	}
-
-	if err := json.Unmarshal([]byte(fiscalJSON), &p.FiscalData); err != nil {
-		return resp, err
-	}
 
 	if err != nil {
 		return resp, err

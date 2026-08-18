@@ -2,16 +2,21 @@ package appbuilder
 
 import (
 	"database/sql"
-	"fmt"
 	"strings"
 )
 
 func toAppBuilderSearchResponse(rows *sql.Rows, search string) (appBuilderSearchResponse, error) {
 	var resp appBuilderSearchResponse
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
 
 	cars := make([]car, 0)
+	carIDs := make([]int, 0)
 
 	for rows.Next() {
 		var c car
@@ -36,6 +41,7 @@ func toAppBuilderSearchResponse(rows *sql.Rows, search string) (appBuilderSearch
 		)
 
 		cars = append(cars, c)
+		carIDs = append(carIDs, c.ID)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -44,8 +50,6 @@ func toAppBuilderSearchResponse(rows *sql.Rows, search string) (appBuilderSearch
 
 	resp.Cars = cars
 	resp.Search = search
-
-	fmt.Println("resp:", resp)
 
 	return resp, nil
 }

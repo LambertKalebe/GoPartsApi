@@ -1,7 +1,7 @@
 package appbuilder
 
 type car struct {
-	ID          int    `json:"id" example:"20976"`
+	ID          int    `json:"-"`
 	Make        string `json:"make" example:"VOLKSWAGEN"`
 	Model       string `json:"model" example:"Fox"`
 	Version     string `json:"version" example:"Plus 1.6 2009"`

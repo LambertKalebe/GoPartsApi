@@ -11,7 +11,7 @@ import (
 
 // Refatorar o código posteriormente, fui adicionando função corrigindo bugs.
 // Ainda faltam outros contextos de anos.
-func serviceAppBuilder(search []string) ([]appBuilderSearchResponse, error) {
+func serviceAppBuilder(search []string) (appBuilderResponse, error) {
 	expandedSearches := expanded(search)
 
 	var wg sync.WaitGroup
@@ -48,7 +48,27 @@ func serviceAppBuilder(search []string) ([]appBuilderSearchResponse, error) {
 
 	wg.Wait()
 
-	return res, nil
+	// Junta todos os IDs encontrados.
+	idsMap := make(map[int]struct{})
+
+	for _, response := range res {
+		for _, vehicle := range response.Cars {
+			idsMap[vehicle.ID] = struct{}{}
+		}
+	}
+
+	// Converte o map para []int.
+	carIDs := make([]int, 0, len(idsMap))
+
+	for id := range idsMap {
+		carIDs = append(carIDs, id)
+	}
+
+	return appBuilderResponse{
+		Results: res,
+		CarIDs:  carIDs,
+		Total:   len(carIDs),
+	}, nil
 }
 
 // EXPANSÃO
@@ -62,14 +82,18 @@ func expanded(search []string) []expandedSearch {
 
 	for _, query := range search {
 		r := strings.NewReplacer(
+			">", "/",
+			"<", "/",
+			":", "",
 			" de ", " ",
 			" da ", " ",
 			" do ", " ",
 			" até ", " ",
 			" ate ", " ",
-			" TODOS ", " ",
+			" todos ", " ",
+			" 4cil ", " ",
 		)
-		query = r.Replace(query)
+		query = r.Replace(strings.ToLower(query))
 		candidates := findYearCandidates(query)
 		candidates = filterYearCandidates(query, candidates)
 
@@ -176,14 +200,17 @@ func postProcessYear(
 	}
 
 	filtered := make([]car, 0, len(response.Cars))
+	ids := make([]int, 0, len(response.Cars))
 
 	for _, vehicle := range response.Cars {
 		if vehicle.Year == expectedYear {
 			filtered = append(filtered, vehicle)
+			ids = append(ids, vehicle.ID)
 		}
 	}
 
 	response.Cars = filtered
+	response.CarIds = ids
 
 	return response
 }
@@ -200,6 +227,12 @@ func previousToken(s string, pos int) string {
 	return tokens[len(tokens)-1]
 }
 
+func isAlphaNumeric(b byte) bool {
+	return (b >= '0' && b <= '9') ||
+		(b >= 'a' && b <= 'z') ||
+		(b >= 'A' && b <= 'Z')
+}
+
 func findYearCandidates(s string) []yearCandidate {
 	matches := yearCandidateRegex.FindAllStringIndex(s, -1)
 
@@ -209,12 +242,13 @@ func findYearCandidates(s string) []yearCandidate {
 		start := match[0]
 		end := match[1]
 
-		// Não aceitar número que faça parte de outro número.
-		if start > 0 && isDigit(s[start-1]) {
+		// Não aceitar número que faça parte de outro
+		// token alfanumérico.
+		if start > 0 && isAlphaNumeric(s[start-1]) {
 			continue
 		}
 
-		if end < len(s) && isDigit(s[end]) {
+		if end < len(s) && isAlphaNumeric(s[end]) {
 			continue
 		}
 
@@ -226,10 +260,6 @@ func findYearCandidates(s string) []yearCandidate {
 	}
 
 	return result
-}
-
-func isDigit(b byte) bool {
-	return b >= '0' && b <= '9'
 }
 
 func filterYearCandidates(
@@ -288,6 +318,17 @@ func expandSingleYear(
 	after := strings.TrimSpace(
 		s[candidate.End:],
 	)
+
+	// 0. "2009 /"
+	if after == "/" {
+		return []expandedSearch{
+			{
+				Search:  buildYearSearch(base, year, ""),
+				Year:    year,
+				HasYear: true,
+			},
+		}
+	}
 
 	// 1. "2009 em diante"
 
@@ -563,4 +604,4 @@ func cutSuffixFold(
 	), true
 }
 
-// Acho que foi o unico trecho que recorri a IA, mas tambem, odeio regex
+// Acho que foi o único trecho que recorri a IA, mas também, odeio regex

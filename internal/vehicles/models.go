@@ -1,5 +1,7 @@
 package vehicles
 
+import "g0/internal/global"
+
 type vehicle struct {
 	ID               int    `json:"id"`
 	Make             string `json:"make"`
@@ -12,15 +14,17 @@ type vehicle struct {
 }
 
 type vehicleDetails struct {
-	ID           int          `json:"id"`
-	Make         string       `json:"make"`
-	Model        string       `json:"model"`
-	Version      string       `json:"version"`
-	Year         int          `json:"year"`
-	Engine       engine       `json:"engine"`
-	Transmission transmission `json:"transmission"`
-	SourceUrl    string       `json:"source_url"`
-	Parts        []parts      `json:"parts"`
+	ID           int            `json:"id"`
+	Make         string         `json:"make"`
+	Model        string         `json:"model"`
+	Version      string         `json:"version"`
+	Year         int            `json:"year"`
+	Engine       engine         `json:"engine"`
+	Transmission transmission   `json:"transmission"`
+	SourceUrl    string         `json:"source_url"`
+	InfoData     global.JsonMap `json:"info"`
+	TechData     global.JsonMap `json:"tech_data"`
+	Parts        []parts        `json:"parts"`
 }
 
 type parts struct {

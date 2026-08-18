@@ -3,7 +3,6 @@ package products
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 )
 
 func serviceProducts(qnt int, page int, public bool) (productsResponse, error) {
@@ -45,31 +44,25 @@ func serviceProductDetailsById(id int) (productDetailsByIdResponse, error) {
 	if errors.Is(err, sql.ErrNoRows) {
 		return productDetailsByIdResponse{}, errors.New("invalid query")
 	}
-	fmt.Println("Service Data\n", data)
 
 	images, err := getProductImagesByProductId(id)
 	if err != nil {
 		return productDetailsByIdResponse{}, err
 	}
-	fmt.Println("Service Images\n", images)
 
 	crossrefs, err := getProductCrossrefsByProductId(id)
 	if err != nil {
 		return productDetailsByIdResponse{}, err
 	}
-	fmt.Println("Service Crossrefs\n", crossrefs)
 
 	apps, err := getProductsAppsByProductId(id)
 	if err != nil {
 		return productDetailsByIdResponse{}, err
 	}
-	fmt.Println("Service Apps\n", apps)
 
 	res, err := toProductDetailsResponse(data, images, crossrefs, apps)
 	if err != nil {
-		fmt.Println("Service Error\n", err)
 		return productDetailsByIdResponse{}, err
 	}
-	fmt.Println("Service \n", res)
 	return res, nil
 }

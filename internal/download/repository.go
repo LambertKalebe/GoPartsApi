@@ -2,7 +2,6 @@ package download
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"g0/internal/database"
 	"strings"
@@ -81,13 +80,6 @@ func getProductImagesUrl(productId int) (*sql.Rows, error) {
 }
 
 func getApps(vehicleIDs []int, productId int) (*sql.Rows, error) {
-	if len(vehicleIDs) != 0 && productId != 0 {
-		return nil, errors.New("apenas um dos dois parâmetros pode ser selecionado: veiculo ou produto")
-	}
-
-	if len(vehicleIDs) == 0 && productId == 0 {
-		return nil, errors.New("nenhum veiculo ou produto foi selecionado")
-	}
 	var rows *sql.Rows
 	var err error
 

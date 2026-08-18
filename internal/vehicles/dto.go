@@ -1,8 +1,8 @@
 package vehicles
 
 type vehiclesRequest struct {
-	Qnt  int `query:"limit" example:"100"`
-	Page int `query:"page" example:"1"`
+	Limit int `query:"limit" example:"100"`
+	Page  int `query:"page" example:"1"`
 }
 
 type vehicleByIdRequest struct {

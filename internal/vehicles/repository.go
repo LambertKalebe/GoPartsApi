@@ -2,7 +2,6 @@ package vehicles
 
 import (
 	"database/sql"
-	"fmt"
 	"g0/internal/database"
 )
 
@@ -69,10 +68,15 @@ SELECT
     e.aspiration AS engine_aspiration,
     t.code AS transmission_code,
     t.name AS transmission_name,
+    vp.info_json,
+    vp.tech_json,
     v.source_url
+	
 FROM vehicles v
 LEFT JOIN makes m
     ON m.id = v.make_id
+LEFT JOIN vehicle_profiles vp
+    ON vp.vehicle_id = v.id
 LEFT JOIN engine_configs e
     ON e.id = v.engine_id
 LEFT JOIN transmissions t
@@ -131,8 +135,6 @@ func getVehicleDetailsById(id int) (*sql.Row, error) {
 }
 
 func getVehicleAppsByProductId(id int) (*sql.Rows, error) {
-	fmt.Println("getVehicleAppsByProductId")
-	fmt.Println(id)
 	rows, err := database.DB.Query(getVehicleAppsByIdQuery, id)
 	if err != nil {
 		return nil, err

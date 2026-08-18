@@ -2,7 +2,6 @@ package search
 
 import (
 	"database/sql"
-	"fmt"
 	"g0/internal/database"
 )
 
@@ -33,6 +32,12 @@ WHERE
     fts5_products MATCH ?
     AND p.public = 1
 ORDER BY
+    CASE
+        WHEN LOWER(p.code_norm) = LOWER(?)
+          OR LOWER(p.code) = LOWER(?)
+        THEN 0
+        ELSE 1
+    END,
     app_count DESC,
     p.name
 LIMIT ?;
@@ -60,18 +65,16 @@ WHERE fts5_vehicles MATCH ?
 LIMIT ?;
 `
 
-func searchProducts(search string, limit int) (*sql.Rows, error) {
-
-	fmt.Println("search:", search)
-	fmt.Println("limit:", limit)
+func searchProducts(search string, searchBase string, limit int) (*sql.Rows, error) {
 
 	rows, err := database.DB.Query(
 		productSearchQuery,
 		search,
+		searchBase,
+		searchBase,
 		limit,
 	)
 	if err != nil {
-		fmt.Println("Repository:", err)
 		return nil, err
 	}
 
@@ -79,9 +82,6 @@ func searchProducts(search string, limit int) (*sql.Rows, error) {
 }
 
 func searchCars(search string, limit int) (*sql.Rows, error) {
-	fmt.Println("SEARCH CARS:")
-	fmt.Println("search:", search)
-	fmt.Println("limit:", limit)
 
 	rows, err := database.DB.Query(
 		carSearchQuery,
@@ -89,7 +89,6 @@ func searchCars(search string, limit int) (*sql.Rows, error) {
 		limit,
 	)
 	if err != nil {
-		fmt.Println("Repository:", err)
 		return nil, err
 	}
 	return rows, nil

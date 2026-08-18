@@ -104,6 +104,8 @@ func toVehicleDetailsResponse(
 		&v.Engine.Aspiration,
 		&v.Transmission.Code,
 		&v.Transmission.Name,
+		&v.InfoData,
+		&v.TechData,
 		&v.SourceUrl,
 	); err != nil {
 		return vehicleDetailsByIdResponse{}, err

@@ -2,7 +2,6 @@ package appbuilder
 
 import (
 	"database/sql"
-	"fmt"
 	"g0/internal/database"
 )
 
@@ -29,7 +28,6 @@ func appBuilderSearch(search string) (*sql.Rows, error) {
 
 	rows, err := database.DB.Query(appBuilderSearchQuery, search)
 	if err != nil {
-		fmt.Println("Repository:", err)
 		return nil, err
 	}
 

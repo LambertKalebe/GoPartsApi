@@ -2,11 +2,6 @@ package download
 
 import (
 	"database/sql"
-	"unicode"
-
-	"golang.org/x/text/runes"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
 )
 
 func toProductImageDownloadResponse(rows *sql.Rows) (productImageQueryResponse, error) {
@@ -30,7 +25,12 @@ func toProductImageDownloadResponse(rows *sql.Rows) (productImageQueryResponse, 
 func formatSqlAppResponse(rows *sql.Rows) ([]vehicle, error) {
 	res := make([]vehicle, 0)
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
 
 	for rows.Next() {
 		var v vehicle
@@ -59,23 +59,4 @@ func formatSqlAppResponse(rows *sql.Rows) ([]vehicle, error) {
 	}
 
 	return res, nil
-}
-
-func removerAcentos(s string) string {
-	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
-	resultado, _, err := transform.String(t, s)
-	if err != nil {
-		return s
-	}
-	return resultado
-}
-
-func (v *vehicle) limparAcentos() {
-	v.Montadora = removerAcentos(v.Montadora)
-	v.Veiculo = removerAcentos(v.Veiculo)
-	v.Modelo = removerAcentos(v.Modelo)
-	v.Motor = removerAcentos(v.Motor)
-	v.ConfigMotor = removerAcentos(v.ConfigMotor)
-	v.Transmissao = removerAcentos(v.Transmissao)
-	v.Combustivel = removerAcentos(v.Combustivel)
 }
