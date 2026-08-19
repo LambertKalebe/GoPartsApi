@@ -30,6 +30,10 @@ func productSearchHandler(c *echo.Context) error {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, err.Error())
 	}
+	if len(resp.Products) == 0 {
+		return echo.NewHTTPError(
+			http.StatusNotFound, "Nenhum carro encontrado")
+	}
 	err = c.JSON(200, resp)
 	return nil
 }
@@ -57,6 +61,10 @@ func carSearchHandler(c *echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, err.Error())
+	}
+	if len(resp.Cars) == 0 {
+		return echo.NewHTTPError(
+			http.StatusNotFound, "Nenhum carro encontrado")
 	}
 	err = c.JSON(200, resp)
 	return nil

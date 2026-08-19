@@ -34,9 +34,14 @@ func serviceAppBuilder(search []string) (appBuilderResponse, error) {
 
 			response, err := toAppBuilderSearchResponse(rows, item.Search)
 			if err != nil {
+				fmt.Printf(
+					"ERRO SCAN | search=%q | quoted=%q | err=%v\n",
+					item.Search,
+					quoted,
+					err,
+				)
 				return
 			}
-
 			response = postProcessYear(response, item.Year)
 
 			mu.Lock()
@@ -81,10 +86,18 @@ func expanded(search []string) []expandedSearch {
 	var result []expandedSearch
 
 	for _, query := range search {
+		query = strings.ToLower(query)
+		query = strings.ReplaceAll(query, "\t", " ")
 		r := strings.NewReplacer(
+			"vw - volkswagen", "volkswagen",
+			"gm - chevrolet", "chevrolet",
+			"vw", "volkswagen",
+			"gm", "chevrolet",
 			">", "/",
 			"<", "/",
 			":", "",
+			" l ", " ",
+			" grand ", " ",
 			" de ", " ",
 			" da ", " ",
 			" do ", " ",
@@ -93,7 +106,8 @@ func expanded(search []string) []expandedSearch {
 			" todos ", " ",
 			" 4cil ", " ",
 		)
-		query = r.Replace(strings.ToLower(query))
+
+		query = r.Replace(query)
 		candidates := findYearCandidates(query)
 		candidates = filterYearCandidates(query, candidates)
 

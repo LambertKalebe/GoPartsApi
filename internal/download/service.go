@@ -34,17 +34,6 @@ func serviceAppDownload(vehicleIDs []int, productId int) ([]byte, error) {
 	vehicles, err := formatSqlAppResponse(rows)
 	// Configuração do CSV
 	gocsv.SetCSVWriter(func(out io.Writer) *gocsv.SafeCSVWriter {
-		// Adiciona o BOM, por mais que não seja necessário, foi adicionado devido a outro setor da empresa que pediu
-		_, err := out.Write([]byte{0xEF, 0xBB, 0xBF})
-		if err != nil {
-			return nil
-		}
-		// Adiciona o BOM novamente. Aparentemente os browsers removem o BOM quando o arquivo é baixado.
-		_, err2 := out.Write([]byte{0xEF, 0xBB, 0xBF})
-		if err2 != nil {
-			return nil
-		}
-
 		writer := csv.NewWriter(out)
 		writer.UseCRLF = true
 		writer.Comma = ';'

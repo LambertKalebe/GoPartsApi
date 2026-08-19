@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"g0/internal/common"
 	"g0/internal/config"
 	"net/http"
@@ -20,45 +21,88 @@ var JWT = echojwt.WithConfig(echojwt.Config{
 	},
 })
 
+type responseWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *responseWriter) WriteHeader(statusCode int) {
+	w.status = statusCode
+	w.ResponseWriter.WriteHeader(statusCode)
+}
+
+func (w *responseWriter) Write(b []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+
+	return w.ResponseWriter.Write(b)
+}
+
 func LoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		start := time.Now()
 
+		original := c.Response()
+
+		writer := &responseWriter{
+			ResponseWriter: original,
+		}
+
+		c.SetResponse(writer)
+
 		err := next(c)
 
-		duration := time.Since(start).String()
-		status := http.StatusOK
+		status := writer.status
+
+		statusColor := common.Green
+
+		if status == 0 {
+			status = http.StatusOK
+		}
+
+		duration := time.Since(start).Microseconds()
+
+		var errorMessage string
 
 		if err != nil {
 			var he *echo.HTTPError
+
 			if errors.As(err, &he) {
 				status = he.Code
+				errorMessage = fmt.Sprint(he.Message)
 			} else {
 				status = http.StatusInternalServerError
+				errorMessage = err.Error()
 			}
 		}
 
-		fields := map[string]interface{}{
-			"method":   c.Request().Method,
-			"uri":      c.Request().URL.Path,
-			"status":   status,
-			"duration": duration,
+		if status >= 400 {
+			statusColor = common.Red
 		}
+
+		message := fmt.Sprintf(
+			"%s%d%s - %s%s%s - %s%dμs%s",
+			statusColor,
+			status,
+			common.Reset,
+
+			common.Blue,
+			c.Request().URL.Path,
+			common.Reset,
+
+			common.Yellow,
+			duration,
+			common.Reset,
+		)
 
 		if err != nil {
-			fields["error"] = err.Error()
-
-			common.Logger.LogError().
-				Fields(fields).
-				Msg("Request")
-
-			return err
+			message += fmt.Sprintf(" - " + errorMessage)
+			common.Logger.LogError().Msg(message)
+		} else {
+			common.Logger.LogInfo().Msg(message)
 		}
 
-		common.Logger.LogInfo().
-			Fields(fields).
-			Msg("Request")
-
-		return nil
+		return err
 	}
 }

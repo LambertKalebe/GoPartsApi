@@ -73,7 +73,7 @@ WHERE p.id = ?;
 
 const getProductCrossrefsByProductIdQuery = `
 SELECT
-    pc.id,
+    pc.equivalent_product_id,
     pc.equivalent_code AS code,
     sm.name AS make
 FROM product_crossrefs pc

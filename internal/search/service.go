@@ -2,7 +2,6 @@ package search
 
 import (
 	"errors"
-	"fmt"
 	"g0/internal/global"
 	"strings"
 )
@@ -25,24 +24,18 @@ func serviceSearchProducts(search string, limit int) (productSearchResponse, err
 		return productSearchResponse{}, errors.New("invalid query")
 	}
 	quoted := global.QuoteTokens([]string{search})[0]
-	fmt.Println("service", quoted)
 	rows, err := searchProducts(quoted, search, limit)
 	if err != nil {
-		fmt.Println("service", err)
 		return productSearchResponse{}, err
 	}
 	res, err := toProductSearchResponse(rows)
 	if err != nil {
-		fmt.Println("service", err)
 		return productSearchResponse{}, err
 	}
 	return res, nil
 }
 
 func serviceSearchCars(search string, limit int) (carSearchResponse, error) {
-	fmt.Println("serviceSearchCars")
-	fmt.Println("search:", search)
-	fmt.Println("limit:", limit)
 	if limit <= 0 {
 		limit = 5
 	} else if limit > 100 {
@@ -61,15 +54,12 @@ func serviceSearchCars(search string, limit int) (carSearchResponse, error) {
 		return carSearchResponse{}, errors.New("invalid query")
 	}
 	quoted := global.QuoteTokens([]string{search})[0]
-	fmt.Println("service", quoted)
 	rows, err := searchCars(quoted, limit)
 	if err != nil {
-		fmt.Println("service", err)
 		return carSearchResponse{}, err
 	}
 	res, err := toCarSearchResponse(rows)
 	if err != nil {
-		fmt.Println("service", err)
 		return carSearchResponse{}, err
 	}
 	return res, nil

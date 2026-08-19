@@ -15,28 +15,67 @@ type MyLogger struct {
 
 var Logger MyLogger
 
-func NewLogger() MyLogger {
-	// create output configuration
-	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
+const (
+	Reset  = "\033[0m"
+	Red    = "\033[31m"
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+	Blue   = "\033[34m"
+	Grey   = "\033[90m"
+)
 
-	// Format level: fatal, error, debug, info, warn
-	output.FormatLevel = func(i any) string {
-		return strings.ToUpper(fmt.Sprintf("|  %-6s|", i))
+func NewLogger() MyLogger {
+	output := zerolog.ConsoleWriter{
+		Out:        os.Stderr,
+		TimeFormat: time.RFC822,
+		NoColor:    false,
 	}
+
+	output.FormatLevel = func(i any) string {
+		level := i.(string)
+
+		switch level {
+		case "panic":
+			return "\033[31mPANIC |\033[0m"
+
+		case "fatal":
+			return "\033[31mFATAL |\033[0m"
+
+		case "error":
+			return "\033[31mERROR |\033[0m"
+
+		case "warn":
+			return "\033[33mWARN  |\033[0m"
+
+		case "info":
+			return "\033[32mINFO  |\033[0m"
+
+		case "debug":
+			return "\033[90mDEBUG |\033[0m"
+
+		case "trace":
+			return "\033[90mTRACE |\033[0m"
+
+		default:
+			return fmt.Sprintf("| %-6s|", strings.ToUpper(level))
+		}
+	}
+
 	output.FormatFieldName = func(i any) string {
 		return fmt.Sprintf("%s:", i)
 	}
+
 	output.FormatFieldValue = func(i any) string {
 		return fmt.Sprintf("%s", i)
 	}
 
-	// format error
 	output.FormatErrFieldName = func(i any) string {
 		return fmt.Sprintf("%s: ", i)
 	}
 
-	zerolog := zerolog.New(output).With().Timestamp().Logger()
-	Logger = MyLogger{zerolog}
+	logger := zerolog.New(output).With().Timestamp().Logger()
+
+	Logger = MyLogger{logger}
 	return Logger
 }
 

@@ -96,7 +96,7 @@ func register(c *echo.Context) error {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, err.Error())
 	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusCreated, res)
 
 }
 

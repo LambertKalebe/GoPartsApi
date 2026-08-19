@@ -1,3 +1,6 @@
+// Retornar retornar alguns dados como o diametro do tambor de freio (para o filtro do appbuilder funcionar)
+// Adicionar configuração no FTS5 (sedan, hatch, etc)
+
 package appbuilder
 
 import (
@@ -32,6 +35,11 @@ func appBuilderHandler(c *echo.Context) error {
 		return echo.NewHTTPError(
 			http.StatusUnauthorized,
 			"Usuário ou senha inválidos",
+		)
+	}
+	if res.Total == 0 {
+		return echo.NewHTTPError(
+			http.StatusNotFound, "Nenhum resultado encontrado",
 		)
 	}
 	return c.JSON(http.StatusOK, res)
