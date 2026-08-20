@@ -1,0 +1,979 @@
+definitions:
+  appbuilder.appBuilderResponse:
+    properties:
+      carIds:
+        items:
+          type: integer
+        type: array
+      results:
+        items:
+          $ref: '#/definitions/appbuilder.appBuilderSearchResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  appbuilder.appBuilderSearchRequest:
+    properties:
+      search:
+        example:
+          - Fox Plus 1.6 8V 2009
+        items:
+          type: string
+        type: array
+    type: object
+  appbuilder.appBuilderSearchResponse:
+    properties:
+      cars:
+        items:
+          $ref: '#/definitions/appbuilder.car'
+        type: array
+      search:
+        example: Fox Plus 1.6 8V 2009
+        type: string
+    type: object
+  appbuilder.car:
+    properties:
+      ID:
+        example: 20976
+        type: integer
+      configMotor:
+        example: 1.6 8V
+        type: string
+      filterData:
+        $ref: '#/definitions/global.JsonMap'
+      make:
+        example: VOLKSWAGEN
+        type: string
+      model:
+        example: Fox
+        type: string
+      version:
+        example: Plus 1.6 2009
+        type: string
+      year:
+        example: 2009
+        type: integer
+    type: object
+  auth.aboutMeResponse:
+    properties:
+      role:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
+  auth.loginRequest:
+    properties:
+      password:
+        example: "123"
+        type: string
+      username:
+        example: user
+        type: string
+    type: object
+  auth.loginResponse:
+    properties:
+      message:
+        example: Login realizado com sucesso
+        type: string
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  auth.logoutResponse:
+    properties:
+      message:
+        example: Logout realizado com sucesso
+        type: string
+    type: object
+  auth.registerRequest:
+    properties:
+      password:
+        example: "123"
+        type: string
+      username:
+        example: user
+        type: string
+    type: object
+  auth.registerResponse:
+    properties:
+      message:
+        example: User created
+        type: string
+    type: object
+  download.appDownloadRequest:
+    properties:
+      productId:
+        example: 1
+        type: integer
+      vehicleId:
+        example:
+          - 1
+        items:
+          type: integer
+        type: array
+    type: object
+  global.JsonMap:
+    additionalProperties: { }
+    type: object
+  httpcustom.ErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  products.application:
+    properties:
+      engine:
+        $ref: '#/definitions/products.engine'
+      id:
+        type: integer
+      make:
+        type: string
+      model:
+        type: string
+      transmission:
+        $ref: '#/definitions/products.transmission'
+      version:
+        type: string
+      year:
+        type: integer
+    type: object
+  products.engine:
+    properties:
+      aspiration:
+        type: string
+      cc:
+        type: string
+      code:
+        type: string
+      fuel:
+        type: string
+      valves:
+        type: string
+    type: object
+  products.image:
+    properties:
+      number:
+        type: integer
+      url:
+        type: string
+    type: object
+  products.product:
+    properties:
+      appCount:
+        example: 1
+        type: integer
+      code:
+        example: FAP-2829
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg
+        type: string
+      make:
+        example: WEGA
+        type: string
+      name:
+        example: FILTRO DE AR
+        type: string
+      public:
+        example: 1
+        type: integer
+    type: object
+  products.productById:
+    properties:
+      appCount:
+        example: 1
+        type: integer
+      code:
+        type: string
+      id:
+        type: integer
+      image:
+        example: https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg
+        type: string
+      make:
+        type: string
+      name:
+        type: string
+    type: object
+  products.productByIdResponse:
+    properties:
+      product:
+        items:
+          $ref: '#/definitions/products.productById'
+        type: array
+    type: object
+  products.productDetails:
+    properties:
+      applications:
+        items:
+          $ref: '#/definitions/products.application'
+        type: array
+      code:
+        type: string
+      fiscal_data:
+        $ref: '#/definitions/global.JsonMap'
+      id:
+        type: integer
+      images:
+        items:
+          $ref: '#/definitions/products.image'
+        type: array
+      logistic_data:
+        $ref: '#/definitions/global.JsonMap'
+      make:
+        type: string
+      name:
+        type: string
+      similar:
+        items:
+          $ref: '#/definitions/products.similar'
+        type: array
+      tech_data:
+        $ref: '#/definitions/global.JsonMap'
+    type: object
+  products.productDetailsByIdResponse:
+    properties:
+      product:
+        items:
+          $ref: '#/definitions/products.productDetails'
+        type: array
+    type: object
+  products.productsResponse:
+    properties:
+      page:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/products.product'
+        type: array
+    type: object
+  products.similar:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      make:
+        type: string
+    type: object
+  products.transmission:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  search.car:
+    properties:
+      engine:
+        type: string
+      id:
+        type: integer
+      make:
+        type: string
+      model:
+        type: string
+      transmission:
+        type: string
+      version:
+        type: string
+      year:
+        type: integer
+    type: object
+  search.carSearchResponse:
+    properties:
+      cars:
+        items:
+          $ref: '#/definitions/search.car'
+        type: array
+    type: object
+  search.product:
+    properties:
+      appCount:
+        example: 1
+        type: integer
+      code:
+        example: FAP-2829
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg
+        type: string
+      make:
+        example: WEGA
+        type: string
+      name:
+        example: FILTRO DE AR
+        type: string
+    type: object
+  search.productSearchResponse:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/search.product'
+        type: array
+    type: object
+  system.healthResponse:
+    properties:
+      healthy:
+        type: boolean
+      message:
+        example: "On"
+        type: string
+    type: object
+  vehicles.engine:
+    properties:
+      aspiration:
+        type: string
+      cc:
+        type: integer
+      code:
+        type: string
+      fuel:
+        type: string
+      valves:
+        type: string
+    type: object
+  vehicles.parts:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      make:
+        type: string
+      name:
+        type: string
+    type: object
+  vehicles.transmission:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  vehicles.vehicle:
+    properties:
+      engine:
+        type: string
+      id:
+        type: integer
+      make:
+        type: string
+      model:
+        type: string
+      partsCount:
+        type: integer
+      transmission:
+        type: string
+      version:
+        type: string
+      year:
+        type: integer
+    type: object
+  vehicles.vehicleByIdResponse:
+    properties:
+      vehicle:
+        items:
+          $ref: '#/definitions/vehicles.vehicle'
+        type: array
+    type: object
+  vehicles.vehicleDetails:
+    properties:
+      engine:
+        $ref: '#/definitions/vehicles.engine'
+      id:
+        type: integer
+      info:
+        $ref: '#/definitions/global.JsonMap'
+      make:
+        type: string
+      model:
+        type: string
+      parts:
+        items:
+          $ref: '#/definitions/vehicles.parts'
+        type: array
+      source_url:
+        type: string
+      tech_data:
+        $ref: '#/definitions/global.JsonMap'
+      transmission:
+        $ref: '#/definitions/vehicles.transmission'
+      version:
+        type: string
+      year:
+        type: integer
+    type: object
+  vehicles.vehicleDetailsByIdResponse:
+    properties:
+      vehicle:
+        items:
+          $ref: '#/definitions/vehicles.vehicleDetails'
+        type: array
+    type: object
+  vehicles.vehiclesResponse:
+    properties:
+      page:
+        type: integer
+      vehicle:
+        items:
+          $ref: '#/definitions/vehicles.vehicle'
+        type: array
+    type: object
+info:
+  contact: { }
+paths:
+  /go-api/appbuilder:
+    post:
+      consumes:
+        - application/json
+      description: Realiza uma consulta de carros por um request de uma ou mais linhas
+      parameters:
+        - description: Linhas de pesquisa
+          in: body
+          name: search
+          required: true
+          schema:
+            $ref: '#/definitions/appbuilder.appBuilderSearchRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/appbuilder.appBuilderResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Search
+      tags:
+        - AppBuilder
+  /go-api/auth/aboutme:
+    get:
+      description: Retorna informações do usuário.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.aboutMeResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: aboutMe
+      tags:
+        - Auth
+  /go-api/auth/login:
+    post:
+      consumes:
+        - application/json
+      description: Realiza um login de usuário
+      parameters:
+        - description: Credenciais
+          in: body
+          name: request
+          required: true
+          schema:
+            $ref: '#/definitions/auth.loginRequest'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.loginResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Login
+      tags:
+        - Auth
+  /go-api/auth/logout:
+    post:
+      description: Apaga os cookies do usuário.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.logoutResponse'
+      summary: Logout
+      tags:
+        - Auth
+  /go-api/auth/register:
+    post:
+      consumes:
+        - application/json
+      description: Cria um novo usuário.
+      parameters:
+        - description: Dados do usuário
+          in: body
+          name: request
+          required: true
+          schema:
+            $ref: '#/definitions/auth.registerRequest'
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/auth.registerResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Register
+      tags:
+        - Auth
+  /go-api/export/apps:
+    post:
+      description: Baixa as aplicações informadas no formato de csv
+      parameters:
+        - description: Ids dos veiculos
+          in: body
+          name: id
+          required: true
+          schema:
+            $ref: '#/definitions/download.appDownloadRequest'
+      produces:
+        - text/csv
+      responses:
+        "200":
+          description: Arquivo CSV
+          schema:
+            type: file
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Applications
+      tags:
+        - Download
+  /go-api/export/images:
+    get:
+      description: Baixa todas as imagens de um produto
+      parameters:
+        - description: Nome base dos arquivos
+          in: query
+          name: fileName
+          required: true
+          type: string
+        - description: ID do produto
+          in: query
+          name: id
+          required: true
+          type: integer
+        - description: Indice da imagem
+          in: query
+          name: index
+          required: true
+          type: integer
+      produces:
+        - image/png
+        - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Images
+      tags:
+        - Download
+  /go-api/products:
+    get:
+      description: Realiza uma consulta de produtos por paginação
+      parameters:
+        - default: 100
+          description: Quantidade máxima de produtos por página
+          in: query
+          maximum: 500
+          minimum: 1
+          name: limit
+          type: integer
+        - description: Somente produtos públicos
+          in: query
+          name: publicOnly
+          type: boolean
+        - description: Página desejada
+          in: query
+          name: page
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/products.productsResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: List
+      tags:
+        - Products
+  /go-api/products/{id}:
+    get:
+      description: Realiza uma consulta basica de um produto com base no seu ID
+      parameters:
+        - description: ID do produto
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/products.productByIdResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: ID
+      tags:
+        - Products
+  /go-api/products/{id}/details:
+    get:
+      description: Realiza uma consulta completa de um produto com base no seu ID
+      parameters:
+        - description: ID do produto
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/products.productDetailsByIdResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Details
+      tags:
+        - Products
+  /go-api/search/cars:
+    get:
+      description: Realiza uma pesquisa de carros
+      parameters:
+        - description: Pesquisa
+          in: query
+          name: search
+          required: true
+          type: string
+        - description: 'limite de resultados (padrão: 100)'
+          in: query
+          name: limit
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.carSearchResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Cars
+      tags:
+        - Search
+  /go-api/search/products:
+    get:
+      description: Realiza uma pesquisa de produtos
+      parameters:
+        - description: Pesquisa
+          in: query
+          name: search
+          required: true
+          type: string
+        - description: 'limite de resultados (padrão: 100)'
+          in: query
+          name: limit
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.productSearchResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Products
+      tags:
+        - Search
+  /go-api/system/health:
+    get:
+      description: Verifica se a API está online
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/system.healthResponse'
+      summary: Check
+      tags:
+        - Health
+  /go-api/vehicles:
+    get:
+      description: Realiza uma consulta de veiculos por paginação
+      parameters:
+        - default: 100
+          description: Quantidade máxima de veiculos por página
+          in: query
+          maximum: 500
+          minimum: 1
+          name: limit
+          type: integer
+        - description: Página desejada
+          in: query
+          name: page
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vehicles.vehiclesResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: List
+      tags:
+        - Vehicles
+  /go-api/vehicles/{id}:
+    get:
+      description: Realiza uma consulta basica de um veiculo com base no seu ID
+      parameters:
+        - description: ID do veiculo
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vehicles.vehicleByIdResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: ID
+      tags:
+        - Vehicles
+  /go-api/vehicles/{id}/details:
+    get:
+      description: Realiza uma consulta completa de um veiculo com base no seu ID
+      parameters:
+        - description: ID do veiculo
+          in: path
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vehicles.vehicleDetailsByIdResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "401":
+          description: Não autorizado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "404":
+          description: Recurso não encontrado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+        "500":
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Details
+      tags:
+        - Vehicles
+swagger: "2.0"

@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Param search body appBuilderSearchRequest true "Linhas de pesquisa"
 // @Accept json
-// @Router /appbuilder [post]
+// @Router /go-api/appbuilder [post]
 // @Success 200 {object} appBuilderResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"

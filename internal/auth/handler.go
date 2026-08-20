@@ -21,7 +21,7 @@ import (
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
 // @Failure 404 {object} httpcustom.ErrorResponse "Recurso não encontrado"
 // @Failure 500 {object} httpcustom.ErrorResponse "Erro interno do servidor"
-// @Router /auth/login [post]
+// @Router /go-api/auth/login [post]
 func login(c *echo.Context) error {
 	req := new(loginRequest)
 	if err := c.Bind(req); err != nil {
@@ -79,7 +79,7 @@ func logoutCookie() *http.Cookie {
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
 // @Failure 404 {object} httpcustom.ErrorResponse "Recurso não encontrado"
 // @Failure 500 {object} httpcustom.ErrorResponse "Erro interno do servidor"
-// @Router /auth/register [post]
+// @Router /go-api/auth/register [post]
 func register(c *echo.Context) error {
 	req := new(registerRequest)
 	if err := c.Bind(req); err != nil {
@@ -106,7 +106,7 @@ func register(c *echo.Context) error {
 // @Tags Auth
 // @Produce json
 // @Success 200 {object} logoutResponse
-// @Router /auth/logout [post]
+// @Router /go-api/auth/logout [post]
 func logout(c *echo.Context) error {
 	res := serviceLogout()
 	c.SetCookie(logoutCookie())
@@ -120,7 +120,7 @@ func logout(c *echo.Context) error {
 // @Produce json
 // @Success 200 {object} aboutMeResponse
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
-// @Router /auth/aboutme [get]
+// @Router /go-api/auth/aboutme [get]
 func aboutMe(c *echo.Context) error {
 	if c.Get("user") == nil {
 		return echo.NewHTTPError(

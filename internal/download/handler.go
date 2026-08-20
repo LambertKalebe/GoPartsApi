@@ -16,7 +16,7 @@ import (
 // @Param fileName query string true "Nome base dos arquivos"
 // @Param id query int true "ID do produto"
 // @Param index query int true "Indice da imagem"
-// @Router /export/images [get]
+// @Router /go-api/export/images [get]
 // @Success 200 {object} string
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
@@ -85,7 +85,7 @@ func imagesExportHandler(c *echo.Context) error {
 // @Tags Download
 // @Produce text/csv
 // @Param id body appDownloadRequest true "Ids dos veiculos"
-// @Router /export/apps [post]
+// @Router /go-api/export/apps [post]
 // @Success 200 {file} file "Arquivo CSV"
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"

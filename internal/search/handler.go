@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Param search query string true "Pesquisa"
 // @Param limit query int false "limite de resultados (padrão: 100)"
-// @Router /search/products [get]
+// @Router /go-api/search/products [get]
 // @Success 200 {object} productSearchResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
@@ -45,7 +45,7 @@ func productSearchHandler(c *echo.Context) error {
 // @Produce json
 // @Param search query string true "Pesquisa"
 // @Param limit query int false "limite de resultados (padrão: 100)"
-// @Router /search/cars [get]
+// @Router /go-api/search/cars [get]
 // @Success 200 {object} carSearchResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"

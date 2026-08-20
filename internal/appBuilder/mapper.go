@@ -31,6 +31,7 @@ func toAppBuilderSearchResponse(rows *sql.Rows, search string) (appBuilderSearch
 			&ccNormalized,
 			&valves,
 			&c.Year,
+			&c.FilterData,
 		)
 		if err != nil {
 			return resp, err

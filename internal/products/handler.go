@@ -16,7 +16,7 @@ import (
 // @Param limit query int false "Quantidade máxima de produtos por página" default(100) minimum(1) maximum(500)
 // @Param publicOnly query bool false "Somente produtos públicos"
 // @Param page query int false "Página desejada"
-// @Router /products [get]
+// @Router /go-api/products [get]
 // @Success 200 {object} productsResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
@@ -44,7 +44,7 @@ func productsHandler(c *echo.Context) error {
 // @Description Realiza uma consulta basica de um produto com base no seu ID
 // @Tags Products
 // @Produce json
-// @Router /products/{id} [get]
+// @Router /go-api/products/{id} [get]
 // @Param id path int true "ID do produto"
 // @Success 200 {object} productByIdResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
@@ -71,7 +71,7 @@ func productByIdHandler(c *echo.Context) error {
 // @Description Realiza uma consulta completa de um produto com base no seu ID
 // @Tags Products
 // @Produce json
-// @Router /products/{id}/details [get]
+// @Router /go-api/products/{id}/details [get]
 // @Param id path int true "ID do produto"
 // @Success 200 {object} productDetailsByIdResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"

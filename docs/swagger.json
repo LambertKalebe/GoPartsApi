@@ -1,0 +1,1479 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "contact": {}
+  },
+  "paths": {
+    "/go-api/appbuilder": {
+      "post": {
+        "description": "Realiza uma consulta de carros por um request de uma ou mais linhas",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "AppBuilder"
+        ],
+        "summary": "Search",
+        "parameters": [
+          {
+            "description": "Linhas de pesquisa",
+            "name": "search",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/appbuilder.appBuilderSearchRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/appbuilder.appBuilderResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/auth/aboutme": {
+      "get": {
+        "description": "Retorna informações do usuário.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "summary": "aboutMe",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/auth.aboutMeResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/auth/login": {
+      "post": {
+        "description": "Realiza um login de usuário",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login",
+        "parameters": [
+          {
+            "description": "Credenciais",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/auth.loginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/auth.loginResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/auth/logout": {
+      "post": {
+        "description": "Apaga os cookies do usuário.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/auth.logoutResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/auth/register": {
+      "post": {
+        "description": "Cria um novo usuário.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register",
+        "parameters": [
+          {
+            "description": "Dados do usuário",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/auth.registerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/auth.registerResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/export/apps": {
+      "post": {
+        "description": "Baixa as aplicações informadas no formato de csv",
+        "produces": [
+          "text/csv"
+        ],
+        "tags": [
+          "Download"
+        ],
+        "summary": "Applications",
+        "parameters": [
+          {
+            "description": "Ids dos veiculos",
+            "name": "id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/download.appDownloadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Arquivo CSV",
+            "schema": {
+              "type": "file"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/export/images": {
+      "get": {
+        "description": "Baixa todas as imagens de um produto",
+        "produces": [
+          "image/png",
+          "image/jpeg"
+        ],
+        "tags": [
+          "Download"
+        ],
+        "summary": "Images",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Nome base dos arquivos",
+            "name": "fileName",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "ID do produto",
+            "name": "id",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "Indice da imagem",
+            "name": "index",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/products": {
+      "get": {
+        "description": "Realiza uma consulta de produtos por paginação",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Products"
+        ],
+        "summary": "List",
+        "parameters": [
+          {
+            "maximum": 500,
+            "minimum": 1,
+            "type": "integer",
+            "default": 100,
+            "description": "Quantidade máxima de produtos por página",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "description": "Somente produtos públicos",
+            "name": "publicOnly",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Página desejada",
+            "name": "page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/products.productsResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/products/{id}": {
+      "get": {
+        "description": "Realiza uma consulta basica de um produto com base no seu ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Products"
+        ],
+        "summary": "ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "ID do produto",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/products.productByIdResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/products/{id}/details": {
+      "get": {
+        "description": "Realiza uma consulta completa de um produto com base no seu ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Products"
+        ],
+        "summary": "Details",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "ID do produto",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/products.productDetailsByIdResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/search/cars": {
+      "get": {
+        "description": "Realiza uma pesquisa de carros",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Search"
+        ],
+        "summary": "Cars",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Pesquisa",
+            "name": "search",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "limite de resultados (padrão: 100)",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/search.carSearchResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/search/products": {
+      "get": {
+        "description": "Realiza uma pesquisa de produtos",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Search"
+        ],
+        "summary": "Products",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Pesquisa",
+            "name": "search",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "limite de resultados (padrão: 100)",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/search.productSearchResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/system/health": {
+      "get": {
+        "description": "Verifica se a API está online",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Health"
+        ],
+        "summary": "Check",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/system.healthResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/vehicles": {
+      "get": {
+        "description": "Realiza uma consulta de veiculos por paginação",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "List",
+        "parameters": [
+          {
+            "maximum": 500,
+            "minimum": 1,
+            "type": "integer",
+            "default": 100,
+            "description": "Quantidade máxima de veiculos por página",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Página desejada",
+            "name": "page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/vehicles.vehiclesResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/vehicles/{id}": {
+      "get": {
+        "description": "Realiza uma consulta basica de um veiculo com base no seu ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "ID do veiculo",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/vehicles.vehicleByIdResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/go-api/vehicles/{id}/details": {
+      "get": {
+        "description": "Realiza uma consulta completa de um veiculo com base no seu ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Details",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "ID do veiculo",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/vehicles.vehicleDetailsByIdResponse"
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "schema": {
+              "$ref": "#/definitions/httpcustom.ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "appbuilder.appBuilderResponse": {
+      "type": "object",
+      "properties": {
+        "carIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/appbuilder.appBuilderSearchResponse"
+          }
+        },
+        "total": {
+          "type": "integer"
+        }
+      }
+    },
+    "appbuilder.appBuilderSearchRequest": {
+      "type": "object",
+      "properties": {
+        "search": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "Fox Plus 1.6 8V 2009"
+          ]
+        }
+      }
+    },
+    "appbuilder.appBuilderSearchResponse": {
+      "type": "object",
+      "properties": {
+        "cars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/appbuilder.car"
+          }
+        },
+        "search": {
+          "type": "string",
+          "example": "Fox Plus 1.6 8V 2009"
+        }
+      }
+    },
+    "appbuilder.car": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "integer",
+          "example": 20976
+        },
+        "configMotor": {
+          "type": "string",
+          "example": "1.6 8V"
+        },
+        "filterData": {
+          "$ref": "#/definitions/global.JsonMap"
+        },
+        "make": {
+          "type": "string",
+          "example": "VOLKSWAGEN"
+        },
+        "model": {
+          "type": "string",
+          "example": "Fox"
+        },
+        "version": {
+          "type": "string",
+          "example": "Plus 1.6 2009"
+        },
+        "year": {
+          "type": "integer",
+          "example": 2009
+        }
+      }
+    },
+    "auth.aboutMeResponse": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "auth.loginRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "example": "123"
+        },
+        "username": {
+          "type": "string",
+          "example": "user"
+        }
+      }
+    },
+    "auth.loginResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Login realizado com sucesso"
+        },
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        }
+      }
+    },
+    "auth.logoutResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Logout realizado com sucesso"
+        }
+      }
+    },
+    "auth.registerRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "example": "123"
+        },
+        "username": {
+          "type": "string",
+          "example": "user"
+        }
+      }
+    },
+    "auth.registerResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User created"
+        }
+      }
+    },
+    "download.appDownloadRequest": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "integer",
+          "example": 1
+        },
+        "vehicleId": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "example": [
+            1
+          ]
+        }
+      }
+    },
+    "global.JsonMap": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "httpcustom.ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        }
+      }
+    },
+    "products.application": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "$ref": "#/definitions/products.engine"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "transmission": {
+          "$ref": "#/definitions/products.transmission"
+        },
+        "version": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer"
+        }
+      }
+    },
+    "products.engine": {
+      "type": "object",
+      "properties": {
+        "aspiration": {
+          "type": "string"
+        },
+        "cc": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "fuel": {
+          "type": "string"
+        },
+        "valves": {
+          "type": "string"
+        }
+      }
+    },
+    "products.image": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "products.product": {
+      "type": "object",
+      "properties": {
+        "appCount": {
+          "type": "integer",
+          "example": 1
+        },
+        "code": {
+          "type": "string",
+          "example": "FAP-2829"
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "image": {
+          "type": "string",
+          "example": "https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg"
+        },
+        "make": {
+          "type": "string",
+          "example": "WEGA"
+        },
+        "name": {
+          "type": "string",
+          "example": "FILTRO DE AR"
+        },
+        "public": {
+          "type": "integer",
+          "example": 1
+        }
+      }
+    },
+    "products.productById": {
+      "type": "object",
+      "properties": {
+        "appCount": {
+          "type": "integer",
+          "example": 1
+        },
+        "code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg"
+        },
+        "make": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "products.productByIdResponse": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/products.productById"
+          }
+        }
+      }
+    },
+    "products.productDetails": {
+      "type": "object",
+      "properties": {
+        "applications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/products.application"
+          }
+        },
+        "code": {
+          "type": "string"
+        },
+        "fiscal_data": {
+          "$ref": "#/definitions/global.JsonMap"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/products.image"
+          }
+        },
+        "logistic_data": {
+          "$ref": "#/definitions/global.JsonMap"
+        },
+        "make": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "similar": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/products.similar"
+          }
+        },
+        "tech_data": {
+          "$ref": "#/definitions/global.JsonMap"
+        }
+      }
+    },
+    "products.productDetailsByIdResponse": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/products.productDetails"
+          }
+        }
+      }
+    },
+    "products.productsResponse": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/products.product"
+          }
+        }
+      }
+    },
+    "products.similar": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "make": {
+          "type": "string"
+        }
+      }
+    },
+    "products.transmission": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "search.car": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "transmission": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer"
+        }
+      }
+    },
+    "search.carSearchResponse": {
+      "type": "object",
+      "properties": {
+        "cars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/search.car"
+          }
+        }
+      }
+    },
+    "search.product": {
+      "type": "object",
+      "properties": {
+        "appCount": {
+          "type": "integer",
+          "example": 1
+        },
+        "code": {
+          "type": "string",
+          "example": "FAP-2829"
+        },
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "image": {
+          "type": "string",
+          "example": "https://www.wega.com.br/wp-content/uploads/2020/09/filtro-de-ar-wega-1.jpg"
+        },
+        "make": {
+          "type": "string",
+          "example": "WEGA"
+        },
+        "name": {
+          "type": "string",
+          "example": "FILTRO DE AR"
+        }
+      }
+    },
+    "search.productSearchResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/search.product"
+          }
+        }
+      }
+    },
+    "system.healthResponse": {
+      "type": "object",
+      "properties": {
+        "healthy": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "example": "On"
+        }
+      }
+    },
+    "vehicles.engine": {
+      "type": "object",
+      "properties": {
+        "aspiration": {
+          "type": "string"
+        },
+        "cc": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "string"
+        },
+        "fuel": {
+          "type": "string"
+        },
+        "valves": {
+          "type": "string"
+        }
+      }
+    },
+    "vehicles.parts": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "make": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "vehicles.transmission": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "vehicles.vehicle": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "partsCount": {
+          "type": "integer"
+        },
+        "transmission": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer"
+        }
+      }
+    },
+    "vehicles.vehicleByIdResponse": {
+      "type": "object",
+      "properties": {
+        "vehicle": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vehicles.vehicle"
+          }
+        }
+      }
+    },
+    "vehicles.vehicleDetails": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "$ref": "#/definitions/vehicles.engine"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "info": {
+          "$ref": "#/definitions/global.JsonMap"
+        },
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vehicles.parts"
+          }
+        },
+        "source_url": {
+          "type": "string"
+        },
+        "tech_data": {
+          "$ref": "#/definitions/global.JsonMap"
+        },
+        "transmission": {
+          "$ref": "#/definitions/vehicles.transmission"
+        },
+        "version": {
+          "type": "string"
+        },
+        "year": {
+          "type": "integer"
+        }
+      }
+    },
+    "vehicles.vehicleDetailsByIdResponse": {
+      "type": "object",
+      "properties": {
+        "vehicle": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vehicles.vehicleDetails"
+          }
+        }
+      }
+    },
+    "vehicles.vehiclesResponse": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "vehicle": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vehicles.vehicle"
+          }
+        }
+      }
+    }
+  }
+}

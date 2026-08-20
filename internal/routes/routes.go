@@ -13,19 +13,20 @@ import (
 )
 
 func Route(e *echo.Echo) {
-	system.Routes(e.Group("system"))
-	auth.Routes(e.Group("auth"))
-	products.Routes(e.Group("products"))
-	vehicles.Routes(e.Group("vehicles"))
-	search.Routes(e.Group("search"))
-	appbuilder.Routes(e.Group("appbuilder"))
-	download.Routes(e.Group("export"))
+	// API
+	system.Routes(e.Group("go-api/system"))
+	auth.Routes(e.Group("go-api/auth"))
+	products.Routes(e.Group("go-api/products"))
+	vehicles.Routes(e.Group("go-api/vehicles"))
+	search.Routes(e.Group("go-api/search"))
+	appbuilder.Routes(e.Group("go-api/appbuilder"))
+	download.Routes(e.Group("go-api/export"))
 
 	// OpenAPI
 	e.Static("/openapi", "./docs")
 
 	// Scalar
-	e.GET("/", func(c *echo.Context) error {
+	e.GET("/docs", func(c *echo.Context) error {
 		return c.HTML(200, `
 			<!doctype html>
 			<html>
@@ -46,6 +47,9 @@ func Route(e *echo.Echo) {
 				</script>
 			</body>
 			</html>
-			`)
+		`)
 	})
+
+	// Frontend Vite
+	e.Static("/", "./webPage")
 }
