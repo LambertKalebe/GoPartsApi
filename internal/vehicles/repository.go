@@ -12,6 +12,14 @@ SELECT
     v.model,
     v.version,
     e.code AS engineCode,
+    TRIM(         
+        COALESCE(printf('%.1f', e.cc_normalized), '') ||         
+        CASE             
+            WHEN e.cc_normalized IS NOT NULL AND e.valves IS NOT NULL             
+            THEN ' '             
+            ELSE '0.0 0V'         
+        END ||         
+        COALESCE(e.valves, '')     ) AS config_motor,
     t.code AS transmissionCode,
     v.year,
     (

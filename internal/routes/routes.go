@@ -14,19 +14,19 @@ import (
 
 func Route(e *echo.Echo) {
 	// API
-	system.Routes(e.Group("go-api/system"))
-	auth.Routes(e.Group("go-api/auth"))
-	products.Routes(e.Group("go-api/products"))
-	vehicles.Routes(e.Group("go-api/vehicles"))
-	search.Routes(e.Group("go-api/search"))
-	appbuilder.Routes(e.Group("go-api/appbuilder"))
-	download.Routes(e.Group("go-api/export"))
+	system.Routes(e.Group("api/system"))
+	auth.Routes(e.Group("api/auth"))
+	products.Routes(e.Group("api/products"))
+	vehicles.Routes(e.Group("api/vehicles"))
+	search.Routes(e.Group("api/search"))
+	appbuilder.Routes(e.Group("api/appbuilder"))
+	download.Routes(e.Group("api/export"))
 
 	// OpenAPI
 	e.Static("/openapi", "./docs")
 
 	// Scalar
-	e.GET("/docs", func(c *echo.Context) error {
+	e.GET("/api/docs", func(c *echo.Context) error {
 		return c.HTML(200, `
 			<!doctype html>
 			<html>
@@ -51,5 +51,9 @@ func Route(e *echo.Echo) {
 	})
 
 	// Frontend Vite
-	e.Static("/", "./webPage")
+	e.Static("/assets", "./dist/assets")
+	e.File("/", "./dist/index.html")
+	e.GET("/*", func(c *echo.Context) error {
+		return c.File("./dist/index.html")
+	})
 }

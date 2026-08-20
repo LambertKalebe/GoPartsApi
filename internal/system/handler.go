@@ -12,7 +12,7 @@ import (
 // @Tags Health
 // @Produce json
 // @Success 200 {object} healthResponse
-// @Router /go-api/system/health [get]
+// @Router /api/system/health [get]
 func health(c *echo.Context) error {
 	res := serviceHealth()
 	if res.Healthy == false {

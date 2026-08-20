@@ -20,6 +20,7 @@ func toVehicleResponse(rows *sql.Rows, page int) (vehiclesResponse, error) {
 			&v.Model,
 			&v.Version,
 			&v.EngineCode,
+			&v.ConfigMotor,
 			&v.TransmissionType,
 			&v.Year,
 			&v.PartsCount,

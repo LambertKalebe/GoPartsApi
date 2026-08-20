@@ -363,6 +363,8 @@ definitions:
     type: object
   vehicles.vehicle:
     properties:
+      configMotor:
+        type: string
       engine:
         type: string
       id:
@@ -433,7 +435,7 @@ definitions:
 info:
   contact: { }
 paths:
-  /go-api/appbuilder:
+  /api/appbuilder:
     post:
       consumes:
         - application/json
@@ -471,7 +473,7 @@ paths:
       summary: Search
       tags:
         - AppBuilder
-  /go-api/auth/aboutme:
+  /api/auth/aboutme:
     get:
       description: Retorna informações do usuário.
       produces:
@@ -488,7 +490,7 @@ paths:
       summary: aboutMe
       tags:
         - Auth
-  /go-api/auth/login:
+  /api/auth/login:
     post:
       consumes:
         - application/json
@@ -526,7 +528,7 @@ paths:
       summary: Login
       tags:
         - Auth
-  /go-api/auth/logout:
+  /api/auth/logout:
     post:
       description: Apaga os cookies do usuário.
       produces:
@@ -539,7 +541,7 @@ paths:
       summary: Logout
       tags:
         - Auth
-  /go-api/auth/register:
+  /api/auth/register:
     post:
       consumes:
         - application/json
@@ -577,7 +579,7 @@ paths:
       summary: Register
       tags:
         - Auth
-  /go-api/export/apps:
+  /api/export/apps:
     post:
       description: Baixa as aplicações informadas no formato de csv
       parameters:
@@ -613,7 +615,7 @@ paths:
       summary: Applications
       tags:
         - Download
-  /go-api/export/images:
+  /api/export/images:
     get:
       description: Baixa todas as imagens de um produto
       parameters:
@@ -659,7 +661,7 @@ paths:
       summary: Images
       tags:
         - Download
-  /go-api/products:
+  /api/products:
     get:
       description: Realiza uma consulta de produtos por paginação
       parameters:
@@ -704,7 +706,7 @@ paths:
       summary: List
       tags:
         - Products
-  /go-api/products/{id}:
+  /api/products/{id}:
     get:
       description: Realiza uma consulta basica de um produto com base no seu ID
       parameters:
@@ -739,7 +741,7 @@ paths:
       summary: ID
       tags:
         - Products
-  /go-api/products/{id}/details:
+  /api/products/{id}/details:
     get:
       description: Realiza uma consulta completa de um produto com base no seu ID
       parameters:
@@ -774,7 +776,7 @@ paths:
       summary: Details
       tags:
         - Products
-  /go-api/search/cars:
+  /api/search/cars:
     get:
       description: Realiza uma pesquisa de carros
       parameters:
@@ -813,7 +815,7 @@ paths:
       summary: Cars
       tags:
         - Search
-  /go-api/search/products:
+  /api/search/products:
     get:
       description: Realiza uma pesquisa de produtos
       parameters:
@@ -852,7 +854,7 @@ paths:
       summary: Products
       tags:
         - Search
-  /go-api/system/health:
+  /api/system/health:
     get:
       description: Verifica se a API está online
       produces:
@@ -865,7 +867,7 @@ paths:
       summary: Check
       tags:
         - Health
-  /go-api/vehicles:
+  /api/vehicles:
     get:
       description: Realiza uma consulta de veiculos por paginação
       parameters:
@@ -906,7 +908,7 @@ paths:
       summary: List
       tags:
         - Vehicles
-  /go-api/vehicles/{id}:
+  /api/vehicles/{id}:
     get:
       description: Realiza uma consulta basica de um veiculo com base no seu ID
       parameters:
@@ -941,7 +943,7 @@ paths:
       summary: ID
       tags:
         - Vehicles
-  /go-api/vehicles/{id}/details:
+  /api/vehicles/{id}/details:
     get:
       description: Realiza uma consulta completa de um veiculo com base no seu ID
       parameters:

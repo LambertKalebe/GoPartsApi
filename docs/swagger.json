@@ -4,7 +4,7 @@
     "contact": {}
   },
   "paths": {
-    "/go-api/appbuilder": {
+    "/api/appbuilder": {
       "post": {
         "description": "Realiza uma consulta de carros por um request de uma ou mais linhas",
         "consumes": [
@@ -62,7 +62,7 @@
         }
       }
     },
-    "/go-api/auth/aboutme": {
+    "/api/auth/aboutme": {
       "get": {
         "description": "Retorna informações do usuário.",
         "produces": [
@@ -88,7 +88,7 @@
         }
       }
     },
-    "/go-api/auth/login": {
+    "/api/auth/login": {
       "post": {
         "description": "Realiza um login de usuário",
         "consumes": [
@@ -146,7 +146,7 @@
         }
       }
     },
-    "/go-api/auth/logout": {
+    "/api/auth/logout": {
       "post": {
         "description": "Apaga os cookies do usuário.",
         "produces": [
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/go-api/auth/register": {
+    "/api/auth/register": {
       "post": {
         "description": "Cria um novo usuário.",
         "consumes": [
@@ -224,7 +224,7 @@
         }
       }
     },
-    "/go-api/export/apps": {
+    "/api/export/apps": {
       "post": {
         "description": "Baixa as aplicações informadas no formato de csv",
         "produces": [
@@ -279,7 +279,7 @@
         }
       }
     },
-    "/go-api/export/images": {
+    "/api/export/images": {
       "get": {
         "description": "Baixa todas as imagens de um produto",
         "produces": [
@@ -347,7 +347,7 @@
         }
       }
     },
-    "/go-api/products": {
+    "/api/products": {
       "get": {
         "description": "Realiza uma consulta de produtos por paginação",
         "produces": [
@@ -414,7 +414,7 @@
         }
       }
     },
-    "/go-api/products/{id}": {
+    "/api/products/{id}": {
       "get": {
         "description": "Realiza uma consulta basica de um produto com base no seu ID",
         "produces": [
@@ -467,7 +467,7 @@
         }
       }
     },
-    "/go-api/products/{id}/details": {
+    "/api/products/{id}/details": {
       "get": {
         "description": "Realiza uma consulta completa de um produto com base no seu ID",
         "produces": [
@@ -520,7 +520,7 @@
         }
       }
     },
-    "/go-api/search/cars": {
+    "/api/search/cars": {
       "get": {
         "description": "Realiza uma pesquisa de carros",
         "produces": [
@@ -579,7 +579,7 @@
         }
       }
     },
-    "/go-api/search/products": {
+    "/api/search/products": {
       "get": {
         "description": "Realiza uma pesquisa de produtos",
         "produces": [
@@ -638,7 +638,7 @@
         }
       }
     },
-    "/go-api/system/health": {
+    "/api/system/health": {
       "get": {
         "description": "Verifica se a API está online",
         "produces": [
@@ -658,7 +658,7 @@
         }
       }
     },
-    "/go-api/vehicles": {
+    "/api/vehicles": {
       "get": {
         "description": "Realiza uma consulta de veiculos por paginação",
         "produces": [
@@ -719,7 +719,7 @@
         }
       }
     },
-    "/go-api/vehicles/{id}": {
+    "/api/vehicles/{id}": {
       "get": {
         "description": "Realiza uma consulta basica de um veiculo com base no seu ID",
         "produces": [
@@ -772,7 +772,7 @@
         }
       }
     },
-    "/go-api/vehicles/{id}/details": {
+    "/api/vehicles/{id}/details": {
       "get": {
         "description": "Realiza uma consulta completa de um veiculo com base no seu ID",
         "produces": [
@@ -1372,6 +1372,9 @@
     "vehicles.vehicle": {
       "type": "object",
       "properties": {
+        "configMotor": {
+          "type": "string"
+        },
         "engine": {
           "type": "string"
         },

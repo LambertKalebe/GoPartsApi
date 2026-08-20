@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param limit query int false "Quantidade máxima de veiculos por página" default(100) minimum(1) maximum(500)
 // @Param page query int false "Página desejada"
-// @Router /go-api/vehicles [get]
+// @Router /api/vehicles [get]
 // @Success 200 {object} vehiclesResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
@@ -42,7 +42,7 @@ func vehiclesHandler(c *echo.Context) error {
 // @Tags Vehicles
 // @Produce json
 // @Param id path int true "ID do veiculo"
-// @Router /go-api/vehicles/{id} [get]
+// @Router /api/vehicles/{id} [get]
 // @Success 200 {object} vehicleByIdResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"
@@ -68,7 +68,7 @@ func vehicleByIdHandler(c *echo.Context) error {
 // @Tags Vehicles
 // @Produce json
 // @Param id path int true "ID do veiculo"
-// @Router /go-api/vehicles/{id}/details [get]
+// @Router /api/vehicles/{id}/details [get]
 // @Success 200 {object} vehicleDetailsByIdResponse
 // @Failure 400 {object} httpcustom.ErrorResponse "Requisição inválida"
 // @Failure 401 {object} httpcustom.ErrorResponse "Não autorizado"

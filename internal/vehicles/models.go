@@ -9,6 +9,7 @@ type vehicle struct {
 	Version          string `json:"version"`
 	Year             int    `json:"year"`
 	EngineCode       string `json:"engine"`
+	ConfigMotor      string `json:"configMotor"`
 	TransmissionType string `json:"transmission"`
 	PartsCount       int    `json:"partsCount"`
 }

@@ -75,23 +75,23 @@ Please change the parent <Route path="${_}"> to <Route path="${_==="/"?"*":`${_}
     margin-right: `).concat(m,"px ").concat(i,`;
     `),o==="padding"&&"padding-right: ".concat(m,"px ").concat(i,";")].filter(Boolean).join(""),`
   }
-  
+
   .`).concat(gu,` {
     right: `).concat(m,"px ").concat(i,`;
   }
-  
+
   .`).concat(yu,` {
     margin-right: `).concat(m,"px ").concat(i,`;
   }
-  
+
   .`).concat(gu," .").concat(gu,` {
     right: 0 `).concat(i,`;
   }
-  
+
   .`).concat(yu," .").concat(yu,` {
     margin-right: 0 `).concat(i,`;
   }
-  
+
   body[`).concat(cr,`] {
     `).concat(qA,": ").concat(m,`px;
   }
