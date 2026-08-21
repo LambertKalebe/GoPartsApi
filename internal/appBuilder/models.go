@@ -1,6 +1,6 @@
 package appbuilder
 
-import "g0/internal/global"
+import "g0/internal/common"
 
 type car struct {
 	ID          int            `json:"ID" example:"20976"`
@@ -9,5 +9,5 @@ type car struct {
 	Version     string         `json:"version" example:"Plus 1.6 2009"`
 	ConfigMotor string         `json:"configMotor" example:"1.6 8V"`
 	Year        int            `json:"year" example:"2009"`
-	FilterData  global.JsonMap `json:"filterData"`
+	FilterData  common.JsonMap `json:"filterData"`
 }

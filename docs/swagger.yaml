@@ -27,9 +27,14 @@ definitions:
         items:
           $ref: '#/definitions/appbuilder.car'
         type: array
+      mainSearchIndex:
+        example: 1
+        type: integer
       search:
         example: Fox Plus 1.6 8V 2009
         type: string
+      total:
+        type: integer
     type: object
   appbuilder.car:
     properties:
@@ -40,7 +45,7 @@ definitions:
         example: 1.6 8V
         type: string
       filterData:
-        $ref: '#/definitions/global.JsonMap'
+        $ref: '#/definitions/common.JsonMap'
       make:
         example: VOLKSWAGEN
         type: string
@@ -102,6 +107,9 @@ definitions:
         example: User created
         type: string
     type: object
+  common.JsonMap:
+    additionalProperties: { }
+    type: object
   download.appDownloadRequest:
     properties:
       productId:
@@ -113,9 +121,6 @@ definitions:
         items:
           type: integer
         type: array
-    type: object
-  global.JsonMap:
-    additionalProperties: { }
     type: object
   httpcustom.ErrorResponse:
     properties:
@@ -218,7 +223,7 @@ definitions:
       code:
         type: string
       fiscal_data:
-        $ref: '#/definitions/global.JsonMap'
+        $ref: '#/definitions/common.JsonMap'
       id:
         type: integer
       images:
@@ -226,7 +231,7 @@ definitions:
           $ref: '#/definitions/products.image'
         type: array
       logistic_data:
-        $ref: '#/definitions/global.JsonMap'
+        $ref: '#/definitions/common.JsonMap'
       make:
         type: string
       name:
@@ -236,7 +241,7 @@ definitions:
           $ref: '#/definitions/products.similar'
         type: array
       tech_data:
-        $ref: '#/definitions/global.JsonMap'
+        $ref: '#/definitions/common.JsonMap'
     type: object
   products.productDetailsByIdResponse:
     properties:
@@ -396,7 +401,7 @@ definitions:
       id:
         type: integer
       info:
-        $ref: '#/definitions/global.JsonMap'
+        $ref: '#/definitions/common.JsonMap'
       make:
         type: string
       model:
@@ -408,7 +413,7 @@ definitions:
       source_url:
         type: string
       tech_data:
-        $ref: '#/definitions/global.JsonMap'
+        $ref: '#/definitions/common.JsonMap'
       transmission:
         $ref: '#/definitions/vehicles.transmission'
       version:
@@ -866,7 +871,55 @@ paths:
             $ref: '#/definitions/system.healthResponse'
       summary: Check
       tags:
-        - Health
+        - System
+  /api/system/logstream:
+    get:
+      description: Transmite os logs do sistema em tempo real usando Server-Sent Events
+        (SSE)
+      produces:
+        - text/event-stream
+      responses:
+        "200":
+          description: Stream SSE de logs
+          schema:
+            type: string
+        "500":
+          description: Streaming não suportado
+          schema:
+            $ref: '#/definitions/httpcustom.ErrorResponse'
+      summary: Stream de logs
+      tags:
+        - System
+  /api/system/restart:
+    post:
+      description: Reinicia o servidor
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Restart
+      tags:
+        - System
+  /api/system/stop:
+    post:
+      description: Finaliza o servidor
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Stop
+      tags:
+        - System
   /api/vehicles:
     get:
       description: Realiza uma consulta de veiculos por paginação

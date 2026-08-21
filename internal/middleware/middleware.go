@@ -17,7 +17,9 @@ var JWT = echojwt.WithConfig(echojwt.Config{
 	TokenLookup: "header:Authorization:Bearer,cookie:token",
 	ErrorHandler: func(c *echo.Context, err error) error {
 		return echo.NewHTTPError(
-			http.StatusUnauthorized, "Não autorizado")
+			http.StatusUnauthorized,
+			"Não autorizado",
+		)
 	},
 })
 
@@ -39,8 +41,22 @@ func (w *responseWriter) Write(b []byte) (int, error) {
 	return w.ResponseWriter.Write(b)
 }
 
+func (w *responseWriter) Flush() {
+	if flusher, ok := w.ResponseWriter.(http.Flusher); ok {
+		flusher.Flush()
+	}
+}
+
 func LoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
+		path := c.Request().URL.Path
+
+		// SSE fica aberto por tempo indeterminado.
+		// Não deve passar pelo wrapper de logging.
+		if path == "/api/system/logstream" {
+			return next(c)
+		}
+
 		start := time.Now()
 
 		original := c.Response()
@@ -55,15 +71,15 @@ func LoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		status := writer.status
 
-		statusColor := common.Green
-
 		if status == 0 {
 			status = http.StatusOK
 		}
 
 		duration := time.Since(start).Microseconds()
 
-		var errorMessage string
+		logType := "INFO"
+		statusColor := common.Green
+		errorMessage := ""
 
 		if err != nil {
 			var he *echo.HTTPError
@@ -78,6 +94,7 @@ func LoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		if status >= 400 {
+			logType = "ERROR"
 			statusColor = common.Red
 		}
 
@@ -88,7 +105,7 @@ func LoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			common.Reset,
 
 			common.Blue,
-			c.Request().URL.Path,
+			path,
 			common.Reset,
 
 			common.Yellow,
@@ -96,12 +113,27 @@ func LoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			common.Reset,
 		)
 
-		if err != nil {
-			message += fmt.Sprintf(" - " + errorMessage)
-			common.Logger.LogError().Msg(message)
-		} else {
-			common.Logger.LogInfo().Msg(message)
+		if errorMessage != "" {
+			message += " - " + errorMessage
 		}
+
+		// Log do terminal
+		if logType == "ERROR" {
+			common.Logger.LogError().
+				Msg(message)
+		} else {
+			common.Logger.LogInfo().
+				Msg(message)
+		}
+
+		// Log estruturado para SSE
+		common.Logs.Publish(common.LogResponse{
+			Type:    logType,
+			Status:  status,
+			URI:     path,
+			Time:    duration,
+			Message: errorMessage,
+		})
 
 		return err
 	}

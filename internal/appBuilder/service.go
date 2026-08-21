@@ -2,15 +2,13 @@ package appbuilder
 
 import (
 	"fmt"
-	"g0/internal/global"
+	"g0/internal/common"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 )
 
-// Refatorar o código posteriormente, fui adicionando função corrigindo bugs.
-// Ainda faltam outros contextos de anos.
 func serviceAppBuilder(search []string) (appBuilderResponse, error) {
 	expandedSearches := expanded(search)
 
@@ -25,7 +23,7 @@ func serviceAppBuilder(search []string) (appBuilderResponse, error) {
 		go func(item expandedSearch) {
 			defer wg.Done()
 
-			quoted := global.QuoteTokens([]string{item.Search})[0]
+			quoted := common.QuoteTokens([]string{item.Search})[0]
 
 			rows, err := appBuilderSearch(quoted)
 			if err != nil {
@@ -42,7 +40,10 @@ func serviceAppBuilder(search []string) (appBuilderResponse, error) {
 				)
 				return
 			}
+
 			response = postProcessYear(response, item.Year)
+
+			response.MainSearchIndex = item.MainSearchIndex
 
 			mu.Lock()
 			res = append(res, response)
@@ -85,9 +86,10 @@ var yearCandidateRegex = regexp.MustCompile(
 func expanded(search []string) []expandedSearch {
 	var result []expandedSearch
 
-	for _, query := range search {
+	for mainIndex, query := range search {
 		query = strings.ToLower(query)
 		query = strings.ReplaceAll(query, "\t", " ")
+
 		r := strings.NewReplacer(
 			"vw - volkswagen", "volkswagen",
 			"gm - chevrolet", "chevrolet",
@@ -108,36 +110,46 @@ func expanded(search []string) []expandedSearch {
 		)
 
 		query = r.Replace(query)
+
 		candidates := findYearCandidates(query)
 		candidates = filterYearCandidates(query, candidates)
 
+		var expandedItems []expandedSearch
+
 		switch len(candidates) {
 		case 0:
-			result = append(result, expandedSearch{
-				Search: query,
-			})
+			expandedItems = []expandedSearch{
+				{
+					Search: query,
+				},
+			}
 
 		case 1:
-			result = append(
-				result,
-				expandSingleYear(query, candidates[0])...,
+			expandedItems = expandSingleYear(
+				query,
+				candidates[0],
 			)
 
 		case 2:
-			result = append(
-				result,
-				expandYearRange(
-					query,
-					candidates[0],
-					candidates[1],
-				)...,
+			expandedItems = expandYearRange(
+				query,
+				candidates[0],
+				candidates[1],
 			)
 
 		default:
-			result = append(result, expandedSearch{
-				Search: query,
-			})
+			expandedItems = []expandedSearch{
+				{
+					Search: query,
+				},
+			}
 		}
+
+		for i := range expandedItems {
+			expandedItems[i].MainSearchIndex = mainIndex
+		}
+
+		result = append(result, expandedItems...)
 	}
 
 	return result

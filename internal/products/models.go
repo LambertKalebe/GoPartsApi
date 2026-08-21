@@ -1,6 +1,6 @@
 package products
 
-import "g0/internal/global"
+import "g0/internal/common"
 
 type product struct {
 	ID       int64  `json:"id" example:"1"`
@@ -26,9 +26,9 @@ type productDetails struct {
 	Code         string         `json:"code"`
 	Name         string         `json:"name"`
 	Make         string         `json:"make"`
-	TechData     global.JsonMap `json:"tech_data"`
-	LogisticData global.JsonMap `json:"logistic_data"`
-	FiscalData   global.JsonMap `json:"fiscal_data"`
+	TechData     common.JsonMap `json:"tech_data"`
+	LogisticData common.JsonMap `json:"logistic_data"`
+	FiscalData   common.JsonMap `json:"fiscal_data"`
 	Similar      []similar      `json:"similar"`
 	Applications []application  `json:"applications"`
 	Images       []image        `json:"images"`

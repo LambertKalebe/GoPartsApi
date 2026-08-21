@@ -51,6 +51,7 @@ func toAppBuilderSearchResponse(rows *sql.Rows, search string) (appBuilderSearch
 
 	resp.Cars = cars
 	resp.Search = search
+	resp.Total = len(carIDs)
 
 	return resp, nil
 }

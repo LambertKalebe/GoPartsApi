@@ -61,8 +61,10 @@ func imagesExportHandler(c *echo.Context) error {
 		}
 	}(resp.Body)
 
-	sep := "#"
-	fileName := req.FileName + sep + strconv.Itoa(req.Index) + ".jpg"
+	fileName := req.FileName + ".jpg"
+	if req.Index > 0 {
+		fileName = req.FileName + "#" + strconv.Itoa(req.Index) + ".jpg"
+	}
 
 	c.Response().Header().Set(
 		"Content-Disposition",

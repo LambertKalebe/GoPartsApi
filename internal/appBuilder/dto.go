@@ -1,9 +1,11 @@
 package appbuilder
 
 type appBuilderSearchResponse struct {
-	Search string `example:"Fox Plus 1.6 8V 2009"`
-	Cars   []car
-	CarIds []int `json:"-"`
+	MainSearchIndex int    `json:"mainSearchIndex" example:"1"`
+	Search          string `json:"search" example:"Fox Plus 1.6 8V 2009"`
+	Cars            []car  `json:"cars"`
+	CarIds          []int  `json:"-"`
+	Total           int    `json:"total"`
 }
 
 type appBuilderResponse struct {
@@ -13,9 +15,10 @@ type appBuilderResponse struct {
 }
 
 type expandedSearch struct {
-	Search  string
-	Year    int
-	HasYear bool
+	MainSearchIndex int
+	Search          string
+	Year            int
+	HasYear         bool
 }
 type yearCandidate struct {
 	Start int

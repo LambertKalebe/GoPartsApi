@@ -656,7 +656,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Health"
+                    "System"
                 ],
                 "summary": "Check",
                 "responses": {
@@ -664,6 +664,78 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/system.healthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/system/logstream": {
+            "get": {
+                "description": "Transmite os logs do sistema em tempo real usando Server-Sent Events (SSE)",
+                "produces": [
+                    "text/event-stream"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Stream de logs",
+                "responses": {
+                    "200": {
+                        "description": "Stream SSE de logs",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Streaming não suportado",
+                        "schema": {
+                            "$ref": "#/definitions/httpcustom.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/system/restart": {
+            "post": {
+                "description": "Reinicia o servidor",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Restart",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/system/stop": {
+            "post": {
+                "description": "Finaliza o servidor",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Stop",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -881,9 +953,16 @@ const docTemplate = `{
                         "$ref": "#/definitions/appbuilder.car"
                     }
                 },
+                "mainSearchIndex": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "search": {
                     "type": "string",
                     "example": "Fox Plus 1.6 8V 2009"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
@@ -899,7 +978,7 @@ const docTemplate = `{
                     "example": "1.6 8V"
                 },
                 "filterData": {
-                    "$ref": "#/definitions/global.JsonMap"
+                    "$ref": "#/definitions/common.JsonMap"
                 },
                 "make": {
                     "type": "string",
@@ -990,6 +1069,10 @@ const docTemplate = `{
                 }
             }
         },
+        "common.JsonMap": {
+            "type": "object",
+            "additionalProperties": {}
+        },
         "download.appDownloadRequest": {
             "type": "object",
             "properties": {
@@ -1007,10 +1090,6 @@ const docTemplate = `{
                     ]
                 }
             }
-        },
-        "global.JsonMap": {
-            "type": "object",
-            "additionalProperties": {}
         },
         "httpcustom.ErrorResponse": {
             "type": "object",
@@ -1162,7 +1241,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "fiscal_data": {
-                    "$ref": "#/definitions/global.JsonMap"
+                    "$ref": "#/definitions/common.JsonMap"
                 },
                 "id": {
                     "type": "integer"
@@ -1174,7 +1253,7 @@ const docTemplate = `{
                     }
                 },
                 "logistic_data": {
-                    "$ref": "#/definitions/global.JsonMap"
+                    "$ref": "#/definitions/common.JsonMap"
                 },
                 "make": {
                     "type": "string"
@@ -1189,7 +1268,7 @@ const docTemplate = `{
                     }
                 },
                 "tech_data": {
-                    "$ref": "#/definitions/global.JsonMap"
+                    "$ref": "#/definitions/common.JsonMap"
                 }
             }
         },
@@ -1433,7 +1512,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "info": {
-                    "$ref": "#/definitions/global.JsonMap"
+                    "$ref": "#/definitions/common.JsonMap"
                 },
                 "make": {
                     "type": "string"
@@ -1451,7 +1530,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tech_data": {
-                    "$ref": "#/definitions/global.JsonMap"
+                    "$ref": "#/definitions/common.JsonMap"
                 },
                 "transmission": {
                     "$ref": "#/definitions/vehicles.transmission"

@@ -2,7 +2,7 @@ package search
 
 import (
 	"errors"
-	"g0/internal/global"
+	"g0/internal/common"
 	"strings"
 )
 
@@ -23,7 +23,7 @@ func serviceSearchProducts(search string, limit int) (productSearchResponse, err
 	if search == "" {
 		return productSearchResponse{}, errors.New("invalid query")
 	}
-	quoted := global.QuoteTokens([]string{search})[0]
+	quoted := common.QuoteTokens([]string{search})[0]
 	rows, err := searchProducts(quoted, search, limit)
 	if err != nil {
 		return productSearchResponse{}, err
@@ -53,7 +53,7 @@ func serviceSearchCars(search string, limit int) (carSearchResponse, error) {
 	if search == "" {
 		return carSearchResponse{}, errors.New("invalid query")
 	}
-	quoted := global.QuoteTokens([]string{search})[0]
+	quoted := common.QuoteTokens([]string{search})[0]
 	rows, err := searchCars(quoted, limit)
 	if err != nil {
 		return carSearchResponse{}, err

@@ -1,6 +1,6 @@
 package vehicles
 
-import "g0/internal/global"
+import "g0/internal/common"
 
 type vehicle struct {
 	ID               int    `json:"id"`
@@ -23,8 +23,8 @@ type vehicleDetails struct {
 	Engine       engine         `json:"engine"`
 	Transmission transmission   `json:"transmission"`
 	SourceUrl    string         `json:"source_url"`
-	InfoData     global.JsonMap `json:"info"`
-	TechData     global.JsonMap `json:"tech_data"`
+	InfoData     common.JsonMap `json:"info"`
+	TechData     common.JsonMap `json:"tech_data"`
 	Parts        []parts        `json:"parts"`
 }
 

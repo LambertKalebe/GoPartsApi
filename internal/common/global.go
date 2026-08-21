@@ -1,12 +1,16 @@
-//Apenas para eu saber quais são as funções globais do projeto
-
-package global
+package common
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
+	"sync/atomic"
 )
+
+var ServerCancel context.CancelFunc
+
+var ExitCode atomic.Int32
 
 func QuoteTokens(search []string) []string {
 	result := make([]string, len(search))
